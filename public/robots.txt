@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /my-patterns
+Disallow: /auth/
+Disallow: /api/
+
+Sitemap: https://easybeadpattern.com/sitemap.xml

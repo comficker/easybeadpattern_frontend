@@ -1,0 +1,542 @@
+/* Rubik (SIL Open Font License, public/fonts/OFL-Rubik.txt), one variable file per subset. */
+@font-face {
+    font-family: 'Rubik'; font-style: normal; font-weight: 400 700; font-display: swap;
+    src: url(/fonts/rubik-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Arial resized to Rubik's metrics (width 103.4%, ascender 935, descender 250
+   per 1000), so text doesn't reflow when Rubik arrives: no layout shift. */
+@font-face {
+    font-family: 'Rubik Fallback'; src: local('Arial'), local('Helvetica'), local('Liberation Sans');
+    size-adjust: 103.4%; ascent-override: 90.4%; descent-override: 24.2%; line-gap-override: 0%;
+}
+@font-face {
+    font-family: 'Rubik'; font-style: normal; font-weight: 400 700; font-display: swap;
+    src: url(/fonts/rubik-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ==========================================================================
+   Tokens. Every size below comes from these scales; no one-off pixel values.
+   Type: 12 caption, 13 meta, 14 interface, 16 body, 18 lead, 22 h2, h1.
+   Space: 4-px steps. Controls: 28 small, 32 default, 40 primary.
+   ========================================================================== */
+:root {
+    --ink: #1F2A44;
+    --muted: #5B6475;
+    /* Borders and decoration only: too light for text (use --muted). */
+    --faint: #8A93A6;
+    --paper: #FFFFFF;
+    --board: #E9ECF2;
+    --peg: #D3D8E2;
+    --line: #DFE3EA;
+    /* 4.6:1 against white text (AA for 14 px). */
+    --accent: #D6336A;
+    --accent-press: #BE2A56;
+    --accent-ink: #FFFFFF;
+    --focus: #3D6BFF;
+
+    --font: 'Rubik', 'Rubik Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --text-xs: 12px;
+    --text-sm: 13px;
+    --text-md: 14px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-xl: 22px;
+    --text-2xl: clamp(26px, 3.2vw, 34px);
+
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 24px;
+    --sp-6: 32px;
+    --sp-7: 48px;
+    --sp-8: 64px;
+
+    --ctl-sm: 28px;
+    --ctl-md: 32px;
+    --ctl-lg: 40px;
+    --ic: 18px;
+
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-pill: 999px;
+    --gutter: var(--sp-4);
+    color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ink: #E7EAF1;
+        --muted: #A3ACBE;
+        --faint: #7A8397;
+        --paper: #141A28;
+        --board: #1E2536;
+        --peg: #2C3549;
+        --line: #283043;
+        --accent: #F0527D;
+        --accent-press: #FF6F95;
+        /* Light pink needs dark text to stay readable (5.1:1). */
+        --accent-ink: #141A28;
+        color-scheme: dark;
+    }
+}
+
+/* ---- Base ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 var(--text-base)/1.55 var(--font);
+    -webkit-font-smoothing: antialiased;
+}
+img, canvas { display: block; max-width: 100%; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: var(--text-2xl); line-height: 1.12; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: var(--text-xl); line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; }
+h3 { font-size: var(--text-base); line-height: 1.3; font-weight: 600; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Iconsax "linear" glyphs, painted with a mask so they take the text colour. */
+.ic {
+    display: inline-block; flex: none; width: 1em; height: 1em; font-size: var(--ic);
+    background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat;
+}
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }
+.muted { color: var(--muted); }
+.small { font-size: var(--text-sm); }
+.prose { max-width: 68ch; }
+.prose p + p { margin-top: var(--sp-3); }
+.section { padding: var(--sp-6) 0; }
+.section > .wrap > h2 { margin-bottom: var(--sp-4); }
+.section-first { padding-top: var(--sp-5); }
+.section-flush { padding-top: 0; }
+.stack-top { margin-top: var(--sp-4); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ---- Buttons: beads are round, so actions are pills ------------------------ */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+    height: var(--ctl-lg); padding: 0 var(--sp-4); border-radius: var(--r-pill);
+    border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+    font-weight: 500; font-size: var(--text-md); text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.btn:hover { border-color: var(--faint); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: var(--accent-press); border-color: var(--accent-press); }
+.btn-small { height: var(--ctl-md); padding: 0 var(--sp-3); }
+.btn-small .ic { --ic: 16px; }
+/* Square, icon only. Always has a title and an aria-label. */
+.btn-icon { width: var(--ctl-md); height: var(--ctl-md); padding: 0; }
+
+/* Segmented choice: one of several, the pressed one is filled. */
+.seg { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.seg button {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-1);
+    height: var(--ctl-md); min-width: var(--ctl-md); padding: 0 var(--sp-3); border-radius: var(--r-pill);
+    border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: var(--text-md);
+}
+.seg button:hover { border-color: var(--faint); }
+.seg button[aria-pressed=true] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.seg.icons button { padding: 0; width: var(--ctl-md); }
+
+/* ---- Header ---------------------------------------------------------------- */
+.site-header { border-bottom: 1px solid var(--line); }
+.site-header .wrap { display: flex; align-items: center; gap: var(--sp-5); height: 56px; }
+.logo { display: flex; align-items: center; gap: var(--sp-2); font-weight: 700; text-decoration: none; font-size: var(--text-lg); }
+.logo-mark { display: grid; grid-template-columns: repeat(2, 9px); gap: 2px; }
+.logo-mark i { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 2.5px currentColor; }
+.logo-mark i:nth-child(1) { color: #E23E6B; }
+.logo-mark i:nth-child(2) { color: #F4B400; }
+.logo-mark i:nth-child(3) { color: #2F9E6B; }
+.logo-mark i:nth-child(4) { color: #3D6BFF; }
+.nav { display: flex; gap: var(--sp-1); margin-left: auto; min-width: 0; white-space: nowrap; }
+.nav a {
+    display: inline-flex; align-items: center; gap: var(--sp-2); height: var(--ctl-md); padding: 0 var(--sp-3);
+    border-radius: var(--r-pill); text-decoration: none; color: var(--muted); font-size: var(--text-md); font-weight: 500;
+}
+.nav a:hover, .nav a.router-link-active { color: var(--ink); background: var(--board); }
+@media (max-width: 860px) {
+    .nav a span:not(.ic) { display: none; }
+    .nav a { width: var(--ctl-lg); height: var(--ctl-lg); padding: 0; justify-content: center; }
+    .nav a .ic { --ic: 20px; }
+}
+@media (max-width: 420px) { .logo > span:last-child { display: none; } }
+
+/* ---- Footer ---------------------------------------------------------------- */
+.site-footer { border-top: 1px solid var(--line); padding: var(--sp-6) 0 var(--sp-7); margin-top: var(--sp-5); color: var(--muted); font-size: var(--text-md); }
+.site-footer .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--sp-5); }
+.site-footer .footer-title { color: var(--ink); font-size: var(--text-md); line-height: 1.3; letter-spacing: 0; margin-bottom: var(--sp-2); }
+.site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-1); }
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { color: var(--ink); }
+.site-footer .credit { margin-top: var(--sp-6); font-size: var(--text-xs); }
+
+/* ---- Page heads ------------------------------------------------------------ */
+.hero { padding: var(--sp-5) 0 var(--sp-4); }
+.hero p { margin-top: var(--sp-2); color: var(--muted); max-width: 64ch; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); font-size: var(--text-sm); color: var(--muted); margin-bottom: var(--sp-2); }
+.crumbs a { text-decoration: none; }
+.crumbs a:hover { color: var(--ink); }
+.listing-intro { color: var(--muted); margin: var(--sp-2) 0 var(--sp-5); max-width: 64ch; }
+
+/* ---- Workbench: settings | board | bead list ------------------------------- */
+.bench {
+    display: grid; grid-template-columns: 232px minmax(0, 1fr) 256px;
+    border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; background: var(--paper);
+}
+.bench-side {
+    padding: var(--sp-4); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); align-content: start; min-width: 0;
+    /* The board alone sets the row height: size-contained panels can't stretch it; they scroll. */
+    contain: size; overflow: auto; overscroll-behavior: contain;
+}
+.bench-side + .bench-stage, .bench-stage + .bench-side { border-left: 1px solid var(--line); }
+/* The pegboard is always square. */
+.bench-stage {
+    background: var(--board); display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+    aspect-ratio: 1; min-width: 0; min-height: 0; position: relative;
+}
+.bench-side.list-side { display: flex; flex-direction: column; overflow: hidden; }
+.list-side > .beadlist-field { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.list-side .beadlist { flex: 1; min-height: 0; }
+.list-side .swap-panel { flex: none; max-height: 45%; overflow: auto; }
+.list-side .export { flex: none; }
+.stage-canvas { display: flex; padding: var(--sp-3); min-width: 0; min-height: 0; grid-row: 2; }
+
+.stage-tools, .stage-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3);
+    background: var(--paper); font-size: var(--text-sm); color: var(--muted);
+}
+.stage-tools { border-bottom: 1px solid var(--line); position: relative; grid-row: 1; color: var(--ink); }
+.stage-bar { border-top: 1px solid var(--line); grid-row: 3; }
+.spacer { flex: 1; }
+.tool-sep { width: 1px; height: 20px; background: var(--line); }
+/* Size, or the bead under the pointer while hovering. The text changes on every
+   mouse move, so the slot's width comes from its flex-basis, never its content,
+   and it never wraps: the bar can't reflow. */
+.stage-info {
+    flex: 1 1 200px; min-width: 0; line-height: var(--ctl-md);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
+}
+.brush-color {
+    display: inline-flex; align-items: center; gap: var(--sp-2); height: var(--ctl-md); padding: 0 var(--sp-3) 0 var(--sp-1);
+    border: 1px solid var(--line); border-radius: var(--r-pill); background: transparent; cursor: pointer; font-size: var(--text-md);
+}
+.brush-color:hover, .brush-color[aria-expanded=true] { border-color: var(--faint); }
+.brush-color .bead-dot { width: 24px; height: 24px; }
+.brush-color .bead-dot::after { inset: 7px; }
+.brush-palette {
+    position: absolute; top: calc(100% + var(--sp-2)); left: var(--sp-3); right: var(--sp-3); z-index: 5;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--sp-3);
+}
+.brush-palette .swatches { max-height: 220px; }
+.zoom { display: inline-flex; align-items: center; gap: var(--sp-1); }
+.zoom output { min-width: 40px; text-align: center; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 1000px) {
+    .bench { grid-template-columns: 1fr; }
+    /* Stacked: the board area itself is square; the tool rows sit outside it. */
+    .bench-stage { order: -1; aspect-ratio: auto; grid-template-rows: auto auto auto; }
+    .stage-canvas { aspect-ratio: 1; }
+    .bench-side, .bench-side.list-side { contain: none; overflow: visible; }
+    .list-side .beadlist { max-height: 360px; }
+    .bench-side + .bench-stage, .bench-stage + .bench-side { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+/* ---- Form fields ----------------------------------------------------------- */
+.field { display: grid; gap: var(--sp-2); }
+.field > label, .field > .label {
+    display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2);
+    font-size: var(--text-md); font-weight: 500;
+}
+.field output { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 400; font-size: var(--text-sm); }
+.field select, .field input[type=number], .field textarea {
+    width: 100%; min-width: 0; height: var(--ctl-md); padding: 0 var(--sp-3); font-size: var(--text-md);
+    border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper);
+}
+input[type=range] { width: 100%; margin: 0; accent-color: var(--accent); }
+.check { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--text-md); cursor: pointer; }
+.field > label.check { justify-content: flex-start; font-weight: 400; }
+.check input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+details.more > summary {
+    display: flex; align-items: center; gap: var(--sp-2); cursor: pointer; list-style: none;
+    font-size: var(--text-md); font-weight: 500;
+}
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary .chev { margin-left: auto; transition: transform .15s; }
+details.more[open] > summary .chev { transform: rotate(180deg); }
+details.more[open] > summary { margin-bottom: var(--sp-3); }
+details.more > * + * { margin-top: var(--sp-3); }
+
+/* ---- Drop zone: lives on the pegboard itself ------------------------------- */
+.drop {
+    width: 100%; height: 100%; margin: auto; border-radius: var(--r-md);
+    display: grid; place-items: center; text-align: center; padding: var(--sp-5); cursor: pointer;
+    background-image: radial-gradient(circle, var(--peg) 18%, transparent 20%);
+    background-size: 22px 22px; background-position: center;
+    border: 2px dashed transparent;
+}
+.drop.over { border-color: var(--accent); }
+.drop-card { background: var(--paper); border-radius: var(--r-md); padding: var(--sp-5); display: grid; gap: var(--sp-3); justify-items: center; max-width: 320px; }
+.drop-card > .ic { --ic: 32px; color: var(--accent); }
+.drop-card p { color: var(--muted); font-size: var(--text-md); }
+
+/* ---- Bead list ------------------------------------------------------------- */
+.beadlist-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--sp-1) var(--sp-3); }
+.beadlist-total { font-size: var(--text-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
+.beadlist { list-style: none; margin: 0 calc(-1 * var(--sp-2)); padding: 0; display: grid; align-content: start; overflow: auto; }
+.bead-row {
+    display: grid; grid-template-columns: 20px 1fr auto; gap: var(--sp-3); align-items: center;
+    padding: var(--sp-1) var(--sp-2); border-radius: var(--r-sm); cursor: pointer; font-size: var(--text-md);
+}
+.bead-row:hover { background: var(--board); }
+.bead-row[aria-selected=true] { background: var(--board); box-shadow: inset 0 0 0 1px var(--faint); }
+.bead-row .code { font-weight: 500; }
+.bead-row .name { color: var(--muted); display: block; font-size: var(--text-xs); line-height: 1.3; }
+.bead-row .count { font-variant-numeric: tabular-nums; font-size: var(--text-sm); }
+.bead-dot { width: 20px; height: 20px; border-radius: 50%; position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.bead-dot::after { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 1px rgba(0,0,0,.1); }
+.swap-panel { border-top: 1px solid var(--line); padding-top: var(--sp-3); display: grid; gap: var(--sp-2); }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(24px, 1fr)); gap: var(--sp-2); max-height: 190px; overflow: auto; padding: 2px; }
+.swatches button { aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.swatches button:hover { transform: scale(1.12); }
+.swatches button[aria-pressed=true] { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink); }
+.export { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.export .btn-primary { grid-column: 1 / -1; }
+
+/* ---- Pattern cards ---------------------------------------------------------- */
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: var(--sp-4); }
+.pcard { text-decoration: none; display: grid; gap: var(--sp-2); align-content: start; min-width: 0; }
+.pcard-img { background: var(--board); border-radius: var(--r-md); display: grid; place-items: center; padding: var(--sp-3); overflow: hidden; }
+.pcard-img img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; }
+.pcard:hover .pcard-img { box-shadow: inset 0 0 0 2px var(--faint); }
+.pcard-title { font-size: var(--text-md); font-weight: 500; line-height: 1.3; letter-spacing: 0; }
+.pcard p { font-size: var(--text-xs); color: var(--muted); }
+.pager { display: flex; gap: var(--sp-2); justify-content: center; align-items: center; margin-top: var(--sp-6); font-size: var(--text-md); }
+
+/* Chips: tags and filters */
+.tags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.tag {
+    display: inline-flex; align-items: center; gap: var(--sp-1); height: var(--ctl-sm); padding: 0 var(--sp-3);
+    border-radius: var(--r-pill); background: var(--board); font-size: var(--text-sm); text-decoration: none;
+}
+.tag .ic { --ic: 14px; }
+.tag:hover { box-shadow: inset 0 0 0 1px var(--faint); }
+.tag[aria-current=page] { background: var(--ink); color: var(--paper); }
+.tag-count { color: var(--muted); margin-left: var(--sp-1); font-variant-numeric: tabular-nums; }
+.tag[aria-current=page] .tag-count { color: inherit; opacity: .7; }
+.filters { display: grid; gap: var(--sp-2); margin-bottom: var(--sp-5); }
+.filter-label { min-width: 72px; font-size: var(--text-sm); font-weight: 500; }
+.related { margin-top: var(--sp-7); display: grid; gap: var(--sp-3); }
+
+/* How it works: an actual sequence, so it is numbered. */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sp-5); counter-reset: step; list-style: none; padding: 0; margin: 0; }
+.steps li { counter-increment: step; display: grid; gap: var(--sp-1); align-content: start; }
+.steps li::before {
+    content: counter(step); width: var(--ctl-md); height: var(--ctl-md); border-radius: 50%; display: grid; place-items: center;
+    background: var(--ink); color: var(--paper); font-weight: 600; font-size: var(--text-md); margin-bottom: var(--sp-2);
+}
+.steps p { color: var(--muted); font-size: var(--text-md); }
+
+.faq { display: grid; max-width: 760px; }
+.faq details { border-top: 1px solid var(--line); padding: var(--sp-3) 0; }
+.faq details:last-child { border-bottom: 1px solid var(--line); }
+.faq summary { display: flex; align-items: center; gap: var(--sp-3); cursor: pointer; font-weight: 500; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+    content: ''; margin-left: auto; width: 16px; height: 16px; flex: none; background: var(--muted);
+    -webkit-mask: url(/icons/arrow-down.svg) center / contain no-repeat; mask: url(/icons/arrow-down.svg) center / contain no-repeat;
+    transition: transform .15s;
+}
+.faq details[open] summary::after { transform: rotate(180deg); }
+.faq details p { margin-top: var(--sp-2); color: var(--muted); font-size: var(--text-md); }
+
+/* Colour chart */
+.chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--sp-3); }
+.chart-item { display: grid; grid-template-columns: 40px 1fr; gap: var(--sp-3); align-items: center; font-size: var(--text-md); }
+.chart-item .bead-dot { width: 40px; height: 40px; }
+.chart-item .bead-dot::after { inset: 13px; }
+.chart-item small { display: block; color: var(--muted); font-size: var(--text-xs); }
+/* One line per colour: names never rewrap when the web font arrives. */
+.chart-text { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chart-cards .pcard-img { grid-template-columns: repeat(6, 1fr); gap: var(--sp-2); padding: var(--sp-4); aspect-ratio: 1; align-content: center; }
+.chart-cards .bead-dot { width: 100%; height: auto; aspect-ratio: 1; }
+
+/* A–Z index */
+.az { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp-5) var(--sp-6); }
+.az h2 { font-size: var(--text-lg); margin-bottom: var(--sp-2); }
+.az ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-1); font-size: var(--text-md); }
+.az a { text-decoration: none; }
+.az a:hover { text-decoration: underline; }
+
+/* Beadwork hub */
+.craft-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); border-top: 1px solid var(--line); }
+.craft-item {
+    display: grid; grid-template-columns: var(--ctl-lg) 1fr; grid-template-rows: auto 1fr; gap: var(--sp-1) var(--sp-3); align-items: start;
+    padding: var(--sp-4) var(--sp-5) var(--sp-4) 0; border-bottom: 1px solid var(--line); text-decoration: none;
+}
+.craft-ic { grid-row: span 2; width: var(--ctl-lg); height: var(--ctl-lg); border-radius: 50%; background: var(--board); display: grid; place-items: center; }
+.craft-ic .ic { --ic: 20px; }
+.craft-item h2 { font-size: var(--text-lg); }
+.craft-item p { color: var(--muted); font-size: var(--text-md); }
+.craft-item:hover h2 { text-decoration: underline; }
+
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}
+
+.error { color: var(--accent); font-size: var(--text-md); }
+.chart-sub { margin: var(--sp-7) 0 var(--sp-2); }
+
+/* Designer */
+.designer-size { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-4); }
+.size-input { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--text-md); font-weight: 500; }
+.size-input input { width: 72px; height: var(--ctl-md); padding: 0 var(--sp-2); border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); font-size: var(--text-md); }
+
+.btn-wide { grid-column: 1 / -1; }
+
+/* Build mode: full screen, board on the left, what to place on the right. */
+.no-scroll, .no-scroll body { overflow: hidden; }
+.build { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: auto minmax(0, 1fr); background: var(--paper); }
+.build-head {
+    display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-4);
+    border-bottom: 1px solid var(--line); position: relative;
+}
+.build-title { display: grid; min-width: 0; font-size: var(--text-md); }
+.build-title strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.build-head .btn:last-child { margin-left: auto; }
+.build-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: transparent; }
+.build-progress i { display: block; height: 100%; background: var(--accent); transition: width .2s; }
+.build-body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; min-height: 0; }
+.build-stage { background: var(--board); display: flex; padding: var(--sp-3); min-width: 0; min-height: 0; }
+.build-side {
+    border-left: 1px solid var(--line); padding: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-3);
+    min-height: 0; overflow: auto;
+}
+.build-nav { display: flex; align-items: center; gap: var(--sp-2); }
+.build-section { flex: 1; display: grid; text-align: center; font-size: var(--text-md); }
+.build-runs { list-style: none; margin: 0; padding: var(--sp-3); display: grid; gap: var(--sp-2); background: var(--board); border-radius: var(--r-md); font-size: var(--text-md); }
+.build-runs li { display: grid; grid-template-columns: 20px auto 1fr; gap: var(--sp-2); align-items: center; }
+.gap-dot { width: 20px; height: 20px; border-radius: 50%; border: 1px dashed var(--faint); }
+.build-colours { list-style: none; margin: 0 calc(-1 * var(--sp-2)); padding: 0; display: grid; gap: var(--sp-1); }
+.build-colours li { display: grid; gap: var(--sp-1); }
+.build-colours .bead-row { width: 100%; border: 0; background: transparent; text-align: left; }
+.build-colours .bead-row[aria-pressed=true] { background: var(--board); box-shadow: inset 0 0 0 1px var(--faint); }
+.build-colours .btn { margin: 0 var(--sp-2); }
+.count.finished { color: var(--muted); }
+@media (max-width: 800px) {
+    .build-body { grid-template-columns: 1fr; grid-template-rows: 55vh minmax(0, 1fr); }
+    .build-side { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+/* My colours */
+.chart-cta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-6); }
+.chart-hint { margin: calc(-1 * var(--sp-5)) 0 var(--sp-4); }
+button.chart-item { border: 1px solid transparent; background: transparent; border-radius: var(--r-md); padding: var(--sp-1); text-align: left; cursor: pointer; }
+button.chart-item:hover { border-color: var(--line); }
+button.chart-item[aria-pressed=true] { background: var(--board); }
+.chart-item { position: relative; }
+.chart-tick { position: absolute; top: var(--sp-1); right: var(--sp-1); --ic: 16px; color: var(--accent); }
+
+.dialog {
+    width: min(640px, calc(100vw - 2 * var(--sp-4))); max-height: min(720px, calc(100vh - 2 * var(--sp-4)));
+    padding: 0; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--paper); color: var(--ink);
+}
+.dialog[open] { display: flex; flex-direction: column; }
+.dialog::backdrop { background: rgba(20, 26, 40, .45); }
+.dialog-head, .dialog-foot { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-4); }
+.dialog-head { align-items: flex-start; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.dialog-head h2 { font-size: var(--text-lg); }
+.dialog-foot { border-top: 1px solid var(--line); }
+.inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: var(--sp-2); padding: var(--sp-4); overflow: auto; }
+.inv-item {
+    position: relative; display: grid; justify-items: center; gap: var(--sp-1); padding: var(--sp-2) var(--sp-1);
+    border: 1px solid transparent; border-radius: var(--r-sm); background: transparent; cursor: pointer; font-size: var(--text-xs);
+}
+.inv-item:hover { border-color: var(--line); }
+.inv-item[aria-pressed=true] { background: var(--board); border-color: var(--faint); }
+.inv-item .bead-dot { width: 28px; height: 28px; }
+.inv-item .bead-dot::after { inset: 9px; }
+.inv-code { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.inv-tick { position: absolute; top: 2px; right: 2px; --ic: 14px; color: var(--accent); }
+
+.dialog-narrow { width: min(460px, calc(100vw - 2 * var(--sp-4))); }
+.dialog-body { display: grid; gap: var(--sp-4); padding: var(--sp-4); }
+.dialog-body .field input, .dialog-body .field textarea { width: 100%; height: var(--ctl-lg); padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); font-size: var(--text-md); }
+.dialog-body .field textarea { height: auto; padding: var(--sp-2) var(--sp-3); resize: vertical; }
+.dialog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); }
+.ok-ic { color: #2F9E6B; vertical-align: -3px; }
+.narrow-center { max-width: 520px; text-align: center; display: grid; gap: var(--sp-3); justify-items: center; }
+.account { display: inline-grid; place-items: center; width: var(--ctl-lg); height: var(--ctl-lg); border-radius: 50%; color: var(--muted); border: 1px solid var(--line); flex: none; }
+.account:hover, .account.router-link-active { color: var(--ink); background: var(--board); }
+
+.page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--sp-3); }
+.card-actions { display: flex; gap: var(--sp-2); }
+.status { font-weight: 500; }
+.status[data-status=pending] { color: #B7791F; }
+.status[data-status=public] { color: #2F9E6B; }
+.empty { display: grid; gap: var(--sp-4); justify-items: start; }
+
+/* Guides */
+.guide { display: grid; gap: var(--sp-5); }
+.guide .lead { font-size: var(--text-lg); color: var(--muted); }
+.guide section { display: grid; gap: var(--sp-3); }
+.guide ul { margin: 0; padding-left: var(--sp-5); display: grid; gap: var(--sp-2); }
+.guide p, .guide li { line-height: 1.65; }
+
+/* Bead colour picker */
+.bead-pick { position: relative; }
+.bead-pick-btn {
+    display: flex; align-items: center; gap: var(--sp-2); width: 100%; height: var(--ctl-lg); padding: 0 var(--sp-2);
+    border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); cursor: pointer; text-align: left;
+}
+.bead-pick-btn:hover, .bead-pick-btn[aria-expanded=true] { border-color: var(--faint); }
+.bead-pick-btn .bead-dot, .bead-pick-btn .gap-dot { width: 24px; height: 24px; flex: none; }
+.bead-pick-btn .bead-dot::after { inset: 7px; }
+.bead-pick-text { flex: 1; min-width: 0; display: grid; line-height: 1.2; }
+.bead-pick-label { font-size: var(--text-xs); color: var(--muted); }
+.bead-pick-name { font-size: var(--text-md); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bead-pick-btn .chev { --ic: 16px; color: var(--muted); transition: transform .15s; }
+.bead-pick-btn[aria-expanded=true] .chev { transform: rotate(180deg); }
+.bead-pick-pop {
+    /* Opens in place: the side panel scrolls, so a floating popover would be clipped. */
+    margin-top: var(--sp-1); background: var(--board); border-radius: var(--r-sm); padding: var(--sp-2);
+}
+.bead-pick-pop .swatches { max-height: 200px; }
+.swatch-none { background: repeating-linear-gradient(45deg, var(--paper) 0 4px, var(--line) 4px 6px) !important; }
+
+/* Letters controls inside the workbench panel */
+.letters-text textarea {
+    width: 100%; height: auto; min-height: 64px; padding: var(--sp-2) var(--sp-3); resize: vertical;
+    font: 600 var(--text-lg)/1.3 var(--font); text-transform: uppercase; letter-spacing: .04em;
+    border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper);
+}
+/* Examples wrap onto as many lines as they need; none is ever cut off. */
+.letters-text .tags { gap: var(--sp-1); }
+.letters-text .tag {
+    height: 24px; padding: 0 var(--sp-2); border: 0; cursor: pointer;
+    font-family: inherit; font-size: var(--text-xs); white-space: nowrap;
+}
+.letters-text .tag[aria-pressed=true] { background: var(--ink); color: var(--paper); }
+.side-rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+.field > .label .btn-icon { width: var(--ctl-sm); height: var(--ctl-sm); }
+
+/* Panel headings are h2 for a correct outline but read at h3 size. */
+.panel-title { font-size: var(--text-base); line-height: 1.3; font-weight: 600; letter-spacing: 0; }
+
+/* Board canvas. Lives here, not in the component: the canvas renders client
+   side only, so its own styles could not be inlined into the page. Flex +
+   auto margins centre the board without clipping it once it is bigger than
+   the view (place-items would cut off the top and left). */
+.bead-canvas { flex: 1; width: 100%; min-width: 0; min-height: 0; display: flex; overflow: auto; overscroll-behavior: contain; }
+.bead-canvas canvas { margin: auto; flex: none; max-width: none; cursor: pointer; touch-action: manipulation; }
+.bead-canvas.zoomed canvas { cursor: grab; }
+.bead-canvas.painting canvas { cursor: crosshair; touch-action: none; }

@@ -1,0 +1,73 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time; a newer push waits instead of racing the swap.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  HOST: 45.76.181.237
+  DIR: /home/frontend/easybeadpattern
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.13
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Test
+        run: bun run test
+
+      # Built here, not on the 2 GB VPS: the Nitro output needs no install there.
+      - name: Build
+        run: bun run build
+
+      - name: SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload
+        run: rsync -az --delete -e "ssh -i ~/.ssh/id_ed25519" .output/ "root@$HOST:$DIR/.output.new/"
+
+      # Swap the new build in, then restart; the old one stays until the swap.
+      - name: Release
+        run: |
+          ssh -i ~/.ssh/id_ed25519 "root@$HOST" "DIR=$DIR bash -s" <<'REMOTE'
+          set -e
+          cd "$DIR"
+          rm -rf .output.old
+          [ -d .output ] && mv .output .output.old
+          mv .output.new .output
+          if pm2 describe easybeadpattern >/dev/null 2>&1; then
+            pm2 restart easybeadpattern --update-env
+          else
+            PORT=4015 NUXT_PUBLIC_SITE_URL=https://easybeadpattern.com \
+              pm2 start .output/server/index.mjs --name easybeadpattern --cwd "$DIR" --max-memory-restart 250M
+            pm2 save
+          fi
+          rm -rf .output.old
+          REMOTE
+
+      - name: Smoke test
+        run: |
+          sleep 3
+          for p in / /patterns /sitemap.xml; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://easybeadpattern.com$p")
+            echo "$p $code"
+            [ "$code" = 200 ] || exit 1
+          done
