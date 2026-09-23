@@ -42,7 +42,7 @@ jobs:
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
       - name: Upload
-        run: rsync -az --delete -e "ssh -i ~/.ssh/id_ed25519" .output/ "root@$HOST:$DIR/.output.new/"
+        run: rsync -az --no-owner --no-group --delete -e "ssh -i ~/.ssh/id_ed25519" .output/ "root@$HOST:$DIR/.output.new/"
 
       # Swap the new build in, then restart; the old one stays until the swap.
       - name: Release

@@ -14,7 +14,7 @@ bun run build
 
 ssh -i $KEY $HOST "mkdir -p $DIR"
 # Upload beside the live build, then swap, so the site is never half-copied.
-rsync -az --delete -e "ssh -i $KEY" .output/ "$HOST:$DIR/.output.new/"
+rsync -az --no-owner --no-group --delete -e "ssh -i $KEY" .output/ "$HOST:$DIR/.output.new/"
 ssh -i $KEY $HOST bash -s <<REMOTE
 set -e
 cd $DIR
