@@ -294,6 +294,7 @@ async function downloadPdf() {
     try {
         const {patternPdf} = await import('~/helper/beads/pdf')
         save(patternPdf(grid.value, brand.value, craft.value, props.title || 'Bead pattern', site), `${fileBase.value}.pdf`)
+        track('download_pattern', {format: 'pdf', craft: craftId.value, brand: brandId.value})
     } finally {
         busy.value = false
     }
@@ -316,6 +317,7 @@ async function downloadPng(transparent: boolean) {
         blob = await patternSheet(grid.value, brand.value, c, props.title || 'Bead pattern', site, mode.value)
     }
     save(blob, `${fileBase.value}${transparent ? '-beads' : ''}.png`)
+    track('download_pattern', {format: transparent ? 'png_beads' : 'png', craft: craftId.value, brand: brandId.value})
 }
 
 // --- autosave (converter only) -----------------------------------------------
