@@ -45,6 +45,10 @@ export interface Catalog {
 // pages stay reachable but are noindex and left out of the sitemap.
 export const MIN_INDEX = 3
 
+// Only art narrower than this is a bead pattern here: wider pieces need too
+// many boards (and beads) to be a practical build.
+export const MAX_WIDTH = 48
+
 export function levelOf(width: number, height: number, colors: number): Level {
     const side = Math.max(width, height)
     if (side <= 16 && colors <= 6) return 'easy'
@@ -64,7 +68,7 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     for (let guard = 0; next && guard < 100; guard++) {
         const page: any = await $fetch(next)
         for (const a of page.results || []) {
-            if (a.status !== 'public' || a.is_tile) continue
+            if (a.status !== 'public' || a.is_tile || a.width >= MAX_WIDTH) continue
             const values = Object.values(a.map_numbers || {}) as number[]
             if (!values.length) continue
             const colors = new Set(values).size
@@ -116,4 +120,5 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     for (const it of items) levels[it.level]++
 
     return {items, tags, sizes, levels}
-}, {name: 'catalog', maxAge: 60 * 60, swr: true})
+// The filter is part of the key, so changing it never serves a stale catalog.
+}, {name: 'catalog', getKey: () => `w${MAX_WIDTH}`, maxAge: 60 * 60, swr: true})
