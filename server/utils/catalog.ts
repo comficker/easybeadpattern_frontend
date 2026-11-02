@@ -64,7 +64,12 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     for (const t of tagPage.results || []) tagNames.set(t.id, {id_string: t.id_string, name: t.name})
 
     const items: CatalogItem[] = []
-    let next: string | null = `${api}/coloring/shared-pages/?is_template=true&template__isnull=true&full_schema=true&page_size=100`
+    // Only what the catalog lists, filtered on the server: public, still
+    // (no animation) and under MAX_WIDTH beads a side. Asking for every
+    // template and dropping most here made each page of 100 so heavy -- an
+    // animation's frames ride along in full_schema -- that this process ran
+    // out of memory and restarted.
+    let next: string | null = `${api}/coloring/shared-pages/?is_template=true&template__isnull=true&status=public&is_anim=false&width__lt=${MAX_WIDTH}&height__lt=${MAX_WIDTH}&full_schema=true&page_size=100`
     for (let guard = 0; next && guard < 100; guard++) {
         const page: any = await $fetch(next)
         for (const a of page.results || []) {
