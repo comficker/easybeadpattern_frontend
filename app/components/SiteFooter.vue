@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {BRAND_IDS, CHART_IDS, getBrand} from '~/helper/beads/brands'
 import {BEADWORK_IDS, CRAFTS} from '~/helper/beads/crafts'
+import {DE_PAGES, dePath} from '~/helper/de'
 import {GUIDES} from '~/helper/guides'
 </script>
 
@@ -12,6 +13,7 @@ import {GUIDES} from '~/helper/guides'
           <h2 class="footer-title">Pattern makers</h2>
           <ul>
             <li v-for="id in BRAND_IDS" :key="id"><NuxtLink :to="`/${getBrand(id).slug}`">{{ getBrand(id).name }} bead pattern maker</NuxtLink></li>
+            <li><NuxtLink :to="`/${CRAFTS.cross.slug}`">{{ CRAFTS.cross.title }}</NuxtLink></li>
           </ul>
         </div>
         <div>
@@ -35,13 +37,24 @@ import {GUIDES} from '~/helper/guides'
             <li><NuxtLink to="/patterns/level/easy">Easy bead patterns</NuxtLink></li>
             <li><NuxtLink to="/patterns/level/medium">Medium bead patterns</NuxtLink></li>
             <li><NuxtLink to="/patterns/level/hard">Hard bead patterns</NuxtLink></li>
-            <li><a href="https://simplepixelart.com">Draw pixel art on SimplePixelArt</a></li>
           </ul>
         </div>
         <div>
           <h2 class="footer-title">Guides</h2>
           <ul>
             <li v-for="g in GUIDES" :key="g.slug"><NuxtLink :to="`/guides/${g.slug}`">{{ g.title }}</NuxtLink></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-title">More free tools from Ninosaur</h2>
+          <ul>
+            <li><a href="https://simplepixelart.com">SimplePixelArt — draw pixel art</a></li>
+            <li><a href="https://squarecoloring.com">SquareColoring — colour by number</a></li>
+            <li><a href="https://freegraphpaper.net">FreeGraphPaper — printable grid paper</a></li>
+          </ul>
+          <h2 class="footer-title stack-top">Deutsch</h2>
+          <ul>
+            <li v-for="p in DE_PAGES" :key="p.slug"><NuxtLink :to="dePath(p)">{{ p.h1 }}</NuxtLink></li>
           </ul>
         </div>
       </div>
