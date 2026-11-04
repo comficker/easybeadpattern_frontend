@@ -11,6 +11,11 @@ export interface SeoOptions {
     type?: 'website' | 'article'
     noindex?: boolean
     jsonLd?: Record<string, unknown>[]
+    // Page language, when it is not the site default. Sets <html lang>.
+    lang?: string
+    // The same page in other languages, for hreflang. Give every language
+    // including this one; the English entry also becomes x-default.
+    alternates?: { lang: string; path: string }[]
 }
 
 const BRAND = 'EasyBeadPattern'
@@ -36,10 +41,16 @@ export function useSeo(o: SeoOptions) {
         ? (o.image.startsWith('http') ? o.image : site + o.image)
         : `${site}/og/default.png`
 
+    const alternates = (o.alternates ?? []).flatMap(a => [
+        {rel: 'alternate', hreflang: a.lang, href: site + a.path},
+        ...(a.lang === 'en' ? [{rel: 'alternate', hreflang: 'x-default', href: site + a.path}] : []),
+    ])
+
     useHead({
         title,
         titleTemplate: withSuffix ? `%s${SUFFIX}` : '%s',
-        link: [{rel: 'canonical', href: url}],
+        ...(o.lang ? {htmlAttrs: {lang: o.lang}} : {}),
+        link: [{rel: 'canonical', href: url}, ...alternates],
         script: (o.jsonLd ?? []).map(j => ({type: 'application/ld+json', innerHTML: JSON.stringify(j)})),
     })
     useSeoMeta({

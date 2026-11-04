@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {DE_FOR_EN, deAlternates} from '~/helper/de'
+
 const route = useRoute()
 const page = computed(() => Math.max(1, Number(route.query.page) || 1))
 const filter = computed(() => ({page: page.value, page_size: 24}))
@@ -12,6 +14,8 @@ useSeo({
     description: `${pagePrefix(page.value)}${data.value?.count ?? ''} free bead patterns by theme, size and difficulty. Open any in Perler, Hama, Artkal or MARD colours with counts and printable pages.`,
     path: `/patterns${pageQuery(page.value)}`,
     image: ls.image,
+    // Page 2 and on are their own series, not a translation pair.
+    alternates: page.value === 1 ? deAlternates(DE_FOR_EN('/patterns')!) : undefined,
     jsonLd: [ls.itemList, ldBreadcrumbs([{name: 'Home', path: '/'}, {name: 'Patterns'}])],
 })
 </script>

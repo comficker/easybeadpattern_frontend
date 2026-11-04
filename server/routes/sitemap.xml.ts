@@ -1,5 +1,6 @@
 import {BRAND_IDS, CHART_IDS, getBrand} from '../../app/helper/beads/brands'
 import {BEADWORK_IDS, CRAFTS} from '../../app/helper/beads/crafts'
+import {DE_PAGES, dePath} from '../../app/helper/de'
 import {GUIDES} from '../../app/helper/guides'
 
 export default defineCachedEventHandler(async (event) => {
@@ -9,6 +10,9 @@ export default defineCachedEventHandler(async (event) => {
     const paths = ['/', '/designer', '/beadwork', '/bead-letters', '/patterns', '/patterns/tag', '/colors']
     for (const id of BRAND_IDS) paths.push(`/${getBrand(id).slug}`)
     for (const id of BEADWORK_IDS) paths.push(`/${CRAFTS[id].slug}`)
+    // Cross stitch is not beadwork, so it is not in BEADWORK_IDS.
+    paths.push(`/${CRAFTS.cross.slug}`)
+    for (const p of DE_PAGES) paths.push(dePath(p))
     for (const id of CHART_IDS) paths.push(`/colors/${id}`)
     paths.push('/guides', ...GUIDES.map(g => `/guides/${g.slug}`))
     // Listing pages below MIN_INDEX are noindex, so they stay out of the sitemap.

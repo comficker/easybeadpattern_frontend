@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {PatternPage} from '~/composables/useApi'
+import type {PagerLabels} from './PatternPager.vue'
 
 // Shared layout of every pattern listing page: crumbs, heading, intro, grid, pager.
 defineProps<{
@@ -8,6 +9,10 @@ defineProps<{
     crumbs?: { to: string; label: string }[]
     data: PatternPage | null | undefined
     page: number
+    // Wording the German pages override; English is the default.
+    empty?: string
+    pagerLabels?: PagerLabels
+    lang?: 'en' | 'de'
 }>()
 </script>
 
@@ -20,9 +25,10 @@ defineProps<{
       <h1>{{ title }}</h1>
       <p v-if="intro" class="listing-intro">{{ intro }}</p>
       <slot name="filters" />
-      <PatternGrid v-if="data?.results?.length" :items="data.results" :level="2" />
+      <PatternGrid v-if="data?.results?.length" :items="data.results" :level="2" :lang="lang" />
+      <p v-else-if="empty" class="muted">{{ empty }}</p>
       <p v-else class="muted">No patterns here yet. Make one from an image on the <NuxtLink to="/">maker</NuxtLink>.</p>
-      <PatternPager :page="page" :pages="data?.num_pages ?? 1" />
+      <PatternPager :page="page" :pages="data?.num_pages ?? 1" :labels="pagerLabels" />
       <slot />
     </div>
   </section>

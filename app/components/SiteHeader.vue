@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const {user, signInUrl} = useAuth()
 const route = useRoute()
-const LINKS = [
+const EN = [
     {to: '/', label: 'Fuse beads', icon: 'bead'},
     {to: '/designer', label: 'Designer', icon: 'edit'},
     {to: '/beadwork', label: 'Beadwork', icon: 'beadwork'},
@@ -9,6 +9,17 @@ const LINKS = [
     {to: '/patterns', label: 'Patterns', icon: 'patterns'},
     {to: '/colors', label: 'Colours', icon: 'palette'},
 ]
+// On a German page the nav is German, and the two links that have a German
+// page point at it. The rest still lead to the English tools.
+const DE = [
+    {to: '/de/buegelperlen-vorlagen', label: 'Bügelperlen', icon: 'bead'},
+    {to: '/designer', label: 'Designer', icon: 'edit'},
+    {to: '/beadwork', label: 'Perlenarbeit', icon: 'beadwork'},
+    {to: '/bead-letters', label: 'Buchstaben', icon: 'text'},
+    {to: '/de/vorlagen', label: 'Vorlagen', icon: 'patterns'},
+    {to: '/colors', label: 'Farben', icon: 'palette'},
+]
+const LINKS = computed(() => (route.path.startsWith('/de/') ? DE : EN))
 </script>
 
 <template>
