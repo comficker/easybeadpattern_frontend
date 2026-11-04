@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {BOARD, getBrand, isPaletteId, type Brand, type PaletteId} from '~/helper/beads/brands'
-import {CRAFTS, CRAFT_IDS, cellAspect, isCraftId, type CraftId} from '~/helper/beads/crafts'
+import {CRAFTS, CRAFT_IDS, cellAspect, isCraftId, unitOf, units, type CraftId} from '~/helper/beads/crafts'
 import type {Tool, ViewMode} from '~/helper/beads/draw'
 import {sizeLine} from '~/helper/beads/info'
 import {applyEdits, applySwaps, countBeads, matchToBeads, type Edits, type SourceGrid} from '~/helper/beads/pattern'
@@ -144,6 +144,8 @@ const matched = computed(() => src.value && matchToBeads(src.value, brand.value,
 }))
 const grid = computed(() => matched.value && applyEdits(applySwaps(matched.value, swaps.value), edits.value, brand.value))
 const counts = computed(() => (grid.value ? countBeads(grid.value) : []))
+// DMC floss and MARD have no clear/glitter/neon colours, so the toggle is dead UI there.
+const hasSpecial = computed(() => brand.value.beads.some(b => b.special))
 
 watch(brandId, () => { swaps.value = {}; focus.value = null })
 
@@ -261,7 +263,7 @@ function onKey(e: KeyboardEvent) {
     else if (k === 'v' || k === 'escape') useTool('select')
 }
 
-const unit = computed(() => brand.value.unit)
+const unit = computed(() => unitOf(brand.value, craft.value))
 const hoverLabel = computed(() => {
     const h = hover.value, g = grid.value
     if (!h || !g || h.x >= g.width || h.y >= g.height) return ''
@@ -376,7 +378,7 @@ defineExpose({setImage})
         </select>
       </div>
       <div class="field">
-        <label for="bb">{{ unit === 'knot' ? 'Floss' : 'Beads' }}</label>
+        <label for="bb">{{ unit === 'bead' ? 'Beads' : 'Floss' }}</label>
         <select id="bb" v-model="brandId" :disabled="craft.palettes.length < 2">
           <option v-for="id in craft.palettes" :key="id" :value="id">{{ getBrand(id).line }} ({{ getBrand(id).beads.length }})</option>
         </select>
@@ -384,7 +386,7 @@ defineExpose({setImage})
 
       <template v-if="isImage">
         <div class="field">
-          <label for="bw">Width <output>{{ settings.width }} {{ unit }}s</output></label>
+          <label for="bw">Width <output>{{ settings.width }} {{ units(unit, settings.width) }}</output></label>
           <div class="seg" role="group" aria-label="Width">
             <button v-for="s in craft.widths" :key="s.w" :aria-pressed="settings.width === s.w" @click="settings.width = s.w">{{ s.label }}</button>
           </div>
@@ -402,7 +404,7 @@ defineExpose({setImage})
 
       <details v-if="isImage || sourceColors > 0" class="more">
         <summary><Icon name="options" />More options<Icon name="arrow-down" class="chev" /></summary>
-        <label class="check"><input v-model="settings.special" type="checkbox"> Allow clear, glitter and neon beads</label>
+        <label v-if="hasSpecial" class="check"><input v-model="settings.special" type="checkbox"> Allow clear, glitter and neon beads</label>
         <label class="check"><input v-model="settings.mine" type="checkbox" :disabled="!myColours.size"> Only colours I have ({{ myColours.size }})</label>
         <button class="btn btn-small" @click="inventoryOpen = true"><Icon name="swatch" />{{ myColours.size ? 'Edit my colours' : 'Pick my colours' }}</button>
         <template v-if="isImage">

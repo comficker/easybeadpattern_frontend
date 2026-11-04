@@ -25,10 +25,11 @@ import {BEADWORK_IDS, CRAFTS} from '~/helper/beads/crafts'
 
   <section class="section">
     <div class="wrap">
-      <h2>Beadwork tools</h2>
-      <nav class="tags" aria-label="Beadwork tools">
+      <h2>More pattern makers</h2>
+      <nav class="tags" aria-label="More pattern makers">
         <NuxtLink v-for="id in BEADWORK_IDS" :key="id" :to="`/${CRAFTS[id].slug}`" class="tag"><Icon :name="CRAFTS[id].icon" />{{ CRAFTS[id].title }}</NuxtLink>
         <NuxtLink to="/bead-letters" class="tag"><Icon name="text" />Bead letters</NuxtLink>
+        <NuxtLink :to="`/${CRAFTS.cross.slug}`" class="tag"><Icon :name="CRAFTS.cross.icon" />{{ CRAFTS.cross.title }}</NuxtLink>
       </nav>
     </div>
   </section>

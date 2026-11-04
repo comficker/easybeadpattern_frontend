@@ -4,7 +4,7 @@
 import {jsPDF} from 'jspdf'
 import {hexToRgb, inkOn} from '../color'
 import {BOARD, type Brand} from './brands'
-import {cellAspect, type Craft} from './crafts'
+import {cellAspect, unitOf, units, type Craft} from './crafts'
 import {canvasSize, cellOrigin, drawPattern} from './draw'
 import {sizeParts} from './info'
 import {boardLabel, boardsOf, countBeads, wordChart, type BeadGrid} from './pattern'
@@ -23,7 +23,7 @@ export function patternPdf(grid: BeadGrid, brand: Brand, craft: Craft, title: st
     counts.forEach((c, i) => num.set(c.index, i + 1))
     const aspect = cellAspect(craft)
     const total = counts.reduce((s, c) => s + c.count, 0)
-    const unit = brand.unit
+    const unit = unitOf(brand, craft)
 
     const fill = (hex: string) => { const [r, g, b] = hexToRgb(hex); doc.setFillColor(r, g, b) }
     const stroke = (hex: string) => { const [r, g, b] = hexToRgb(hex); doc.setDrawColor(r, g, b) }
@@ -110,16 +110,16 @@ export function patternPdf(grid: BeadGrid, brand: Brand, craft: Craft, title: st
 
     // Shopping list: a table in one or two columns, continued if long.
     let y = panelY + ih + 2 * pad + 11
-    font(12.5, 'bold'); doc.text(unit === 'knot' ? 'Floss you need' : 'Beads you need', M, y)
+    font(12.5, 'bold'); doc.text(unit === 'bead' ? 'Beads you need' : 'Floss you need', M, y)
     font(9, 'normal', MUTED)
-    doc.text(`${total.toLocaleString('en')} ${unit}${total === 1 ? '' : 's'}, ${counts.length} colour${counts.length === 1 ? '' : 's'}`, PW - M, y, {align: 'right'})
+    doc.text(`${total.toLocaleString('en')} ${units(unit, total)}, ${counts.length} colour${counts.length === 1 ? '' : 's'}`, PW - M, y, {align: 'right'})
     const RH = 6.4
     const twoCols = counts.length > 12
     const colW = twoCols ? (PW - 2 * M - 6) / 2 : PW - 2 * M
     const tableHead = (x: number, yy: number) => {
         font(7.5, 'normal', FAINT)
         doc.text('No.', x + 1.5, yy); doc.text('Code and name', x + 16, yy)
-        doc.text(unit === 'knot' ? 'Knots' : 'Beads', x + colW - 1.5, yy, {align: 'right'})
+        doc.text(unit === 'bead' ? 'Beads' : unit === 'knot' ? 'Knots' : 'Stitches', x + colW - 1.5, yy, {align: 'right'})
         stroke(LINE); doc.setLineWidth(0.2); doc.line(x, yy + 1.6, x + colW, yy + 1.6)
     }
     let top = y + 7, col = 0, row = 0
@@ -132,7 +132,7 @@ export function patternPdf(grid: BeadGrid, brand: Brand, craft: Craft, title: st
             if (twoCols && col === 0) col = 1
             else {
                 doc.addPage(); col = 0
-                pageHead(unit === 'knot' ? 'Floss you need' : 'Beads you need', 'Continued')
+                pageHead(unit === 'bead' ? 'Beads you need' : 'Floss you need', 'Continued')
                 top = M + 22
                 tableHead(M, top); if (twoCols) tableHead(M + colW + 6, top)
                 cap = fits()

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {units} from '~/helper/beads/crafts'
 import type {Bead} from '~/helper/beads/brands'
 import type {BeadCount} from '~/helper/beads/pattern'
 
@@ -6,7 +7,7 @@ const props = defineProps<{
     counts: BeadCount[]
     beads: Bead[]
     brandName: string
-    unit?: 'bead' | 'knot'
+    unit?: 'bead' | 'knot' | 'stitch'
 }>()
 const focus = defineModel<number | null>('focus', {default: null})
 const emit = defineEmits<{ swap: [from: number, to: number] }>()
@@ -29,8 +30,8 @@ function swapTo(to: number) {
 <template>
   <div class="field beadlist-field">
     <div class="beadlist-head">
-      <h2 class="panel-title">{{ unit === 'knot' ? 'Floss to buy' : 'Beads to buy' }}</h2>
-      <span class="beadlist-total">{{ total.toLocaleString() }} {{ unit ?? 'bead' }}{{ total === 1 ? '' : 's' }}, {{ counts.length }} colour{{ counts.length === 1 ? '' : 's' }}</span>
+      <h2 class="panel-title">{{ unit === 'bead' || !unit ? 'Beads to buy' : 'Floss to buy' }}</h2>
+      <span class="beadlist-total">{{ total.toLocaleString() }} {{ units(unit ?? 'bead', total) }}, {{ counts.length }} colour{{ counts.length === 1 ? '' : 's' }}</span>
     </div>
     <ul v-if="counts.length" class="beadlist" role="listbox" :aria-label="`${brandName} colours in this pattern`">
       <li

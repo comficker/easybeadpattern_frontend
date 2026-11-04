@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {brandBySlug} from '~/helper/beads/brands'
 import {CRAFTS, craftBySlug} from '~/helper/beads/crafts'
+import {DE_FOR_EN, deAlternates} from '~/helper/de'
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -9,6 +10,7 @@ const brand = brandBySlug(slug)
 const craft = brand ? null : craftBySlug(slug)
 if (!brand && !craft) throw createError({statusCode: 404, statusMessage: 'Page not found', fatal: true})
 
+const de = DE_FOR_EN(`/${slug}`)
 if (brand) {
     const description = `Turn any image into a ${brand.line} pattern matched to ${brand.beads.length} real ${brand.name} colours, with a bead count and a page for every pegboard. Free.`
     useSeo({
@@ -16,6 +18,8 @@ if (brand) {
         description,
         path: `/${brand.slug}`,
         image: `/og/brand-${brand.id}.png`,
+        // Only the brands that have a German page claim a pair.
+        alternates: de ? deAlternates(de) : undefined,
         jsonLd: [
             ldTool(`${brand.name} bead pattern maker`, description, `/${brand.slug}`),
             ldFaq(CRAFTS.fuse.faq),
@@ -31,7 +35,9 @@ if (brand) {
         jsonLd: [
             ldTool(craft.title, craft.metaDescription, `/${craft.slug}`),
             ldFaq(craft.faq),
-            ldBreadcrumbs([{name: 'Beadwork', path: '/beadwork'}, {name: craft.title}]),
+            ldBreadcrumbs(craft.id === 'cross'
+                ? [{name: 'Bead pattern maker', path: '/'}, {name: craft.title}]
+                : [{name: 'Beadwork', path: '/beadwork'}, {name: craft.title}]),
         ],
     })
 }
@@ -53,7 +59,10 @@ if (brand) {
   <div v-else-if="craft">
     <section class="hero">
       <div class="wrap">
-        <p class="crumbs"><NuxtLink to="/beadwork">Beadwork</NuxtLink> / {{ craft.name }}</p>
+        <p class="crumbs">
+          <NuxtLink v-if="craft.id === 'cross'" to="/">Bead pattern maker</NuxtLink>
+          <NuxtLink v-else to="/beadwork">Beadwork</NuxtLink> / {{ craft.name }}
+        </p>
         <h1>{{ craft.title }}</h1>
         <p>{{ craft.intro }}</p>
       </div>

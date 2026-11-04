@@ -1,10 +1,10 @@
 import {BOARD, BRAND_IDS, type PaletteId} from './brands'
 
-export type CraftId = 'fuse' | 'kandi' | 'loom' | 'peyote' | 'brick' | 'friendship'
+export type CraftId = 'fuse' | 'pony' | 'kandi' | 'loom' | 'peyote' | 'brick' | 'friendship' | 'cross'
 // square: rows and columns line up. peyote: every other column sits half a
 // cell lower. brick: every other row sits half a cell to the right.
 export type Layout = 'square' | 'peyote' | 'brick'
-export type Shape = 'bead' | 'tube' | 'knot'
+export type Shape = 'bead' | 'tube' | 'knot' | 'cross'
 // Order the written chart walks each row in.
 export type RowOrder = 'ltr' | 'zigzag' | 'peyote'
 
@@ -20,6 +20,9 @@ export interface Craft {
     palettes: PaletteId[]
     layout: Layout
     shape: Shape
+    // What one cell is called, when the palette's own noun is wrong: DMC floss
+    // is knots on a bracelet but stitches on Aida.
+    unit?: 'bead' | 'knot' | 'stitch'
     // Size of one cell in mm (width × height). Sets the drawn proportions and
     // the finished size. null: proportions 1:1 and no size in cm.
     cellMm: { w: number; h: number } | null
@@ -74,6 +77,44 @@ export const CRAFTS: Record<CraftId, Craft> = {
         ],
         metaTitle: 'Bead pattern maker: photo to Perler beads',
         metaDescription: 'Turn any photo into a Perler, Hama, Artkal or MARD bead pattern. Real bead colours, a bead count and a printable page for every pegboard. Free, no sign-up.',
+    },
+    pony: {
+        id: 'pony',
+        icon: 'star',
+        name: 'Pony beads',
+        slug: 'pony-bead-pattern-maker',
+        title: 'Pony bead pattern maker',
+        intro: 'Turn any image into a pony bead pattern for keychains, cuffs, suncatchers and lanyards, with a bead count per colour and a written row list.',
+        palettes: ['pony', ...BRAND_IDS],
+        layout: 'square',
+        shape: 'bead',
+        cellMm: null,
+        widths: [
+            {label: '10', w: 10},
+            {label: '20', w: 20},
+            {label: '30', w: 30},
+            {label: '40', w: 40},
+        ],
+        defaultWidth: 20,
+        maxWidth: 100,
+        defaultColors: 10,
+        boards: false,
+        rowOrder: 'ltr',
+        extras: (w, h) => [`${w * h} strung cells`],
+        steps: [
+            {title: 'Add an image or a word', text: 'Bold shapes read best: pony beads are large, so a small grid already makes a big piece.'},
+            {title: 'Choose the width', text: 'Width is beads per row. Keychains are often 10 to 20 beads across, cuffs 30 to 60 around.'},
+            {title: 'Keep the colours few', text: 'Mixed packs carry a handful of solid colours, so 6 to 10 colours is realistic.'},
+            {title: 'String row by row', text: 'The PDF lists every row as runs of colour, so you can count beads onto cord or elastic without reading the grid.'},
+        ],
+        faq: [
+            {q: 'How big is a pony bead?', a: 'About 9 mm across and 6 mm tall with a 4 mm hole. Because they are strung rather than laid on a board, the finished size depends on your cord and tension, so no size in cm is shown.'},
+            {q: 'Why are the colours named, not coded?', a: 'Pony bead brands do not share colour codes and mixed packs are sold by colour name. Pick the closest bead in your pack.'},
+            {q: 'What can I make with this?', a: 'Anything strung on a flat grid: keychains and pet charms, lanyards, suncatchers, and cuffs. For a kandi cuff with a row-by-row cuff size, use the kandi pattern maker.'},
+            {q: 'Can I use Perler colours instead?', a: 'Yes. Switch the palette to a fuse bead brand to match a specific bead range.'},
+        ],
+        metaTitle: 'Pony bead pattern maker: free patterns',
+        metaDescription: 'Turn a photo or a word into a pony bead pattern for keychains, cuffs and suncatchers, with a bead count per colour and a printable row-by-row list. Free.',
     },
     kandi: {
         id: 'kandi',
@@ -261,14 +302,62 @@ export const CRAFTS: Record<CraftId, Craft> = {
         metaTitle: 'Friendship bracelet pattern maker (alpha)',
         metaDescription: 'Turn a picture or a word into an alpha friendship bracelet pattern matched to DMC floss, with knot counts, string count and a row-by-row chart.',
     },
+    cross: {
+        id: 'cross',
+        icon: 'swatch',
+        name: 'Cross stitch',
+        slug: 'cross-stitch-pattern-maker',
+        title: 'Cross stitch pattern maker',
+        intro: 'Turn any image into a cross stitch chart matched to real DMC floss numbers, with a stitch count per colour, the finished size on 14-count Aida and a printable chart.',
+        palettes: ['dmc'],
+        layout: 'square',
+        shape: 'cross',
+        unit: 'stitch',
+        cellMm: {w: 25.4 / 14, h: 25.4 / 14},
+        widths: [
+            {label: '40', w: 40},
+            {label: '60', w: 60},
+            {label: '80', w: 80},
+            {label: '100', w: 100},
+        ],
+        defaultWidth: 60,
+        maxWidth: 150,
+        defaultColors: 20,
+        boards: false,
+        rowOrder: 'ltr',
+        extras: () => ['on 14-count Aida'],
+        steps: [
+            {title: 'Add an image', text: 'Photos, logos and pixel art all work. Turn on remove background to keep only the motif.'},
+            {title: 'Set the stitch count', text: 'Width is stitches per row. On 14-count Aida, 14 stitches make one inch, so a 60-stitch-wide chart is about 11 cm across.'},
+            {title: 'Choose how many colours', text: 'Each colour is a skein to buy and a needle to manage. Twenty is plenty for most pictures; portraits need more.'},
+            {title: 'Stitch from the chart', text: 'Every colour is matched to a DMC floss number, numbered in the key and listed with its stitch count.'},
+        ],
+        faq: [
+            {q: 'Which floss numbers are these?', a: 'DMC stranded cotton. Each colour in the chart is matched to the closest DMC number, so the key tells you exactly what to buy.'},
+            {q: 'How do I work out the finished size?', a: 'Divide the stitch count by the Aida count. The size shown assumes 14-count Aida (14 stitches per inch); on 16-count the same chart comes out about an eighth smaller, on 11-count about a quarter larger.'},
+            {q: 'Does it use half stitches or backstitch?', a: 'No. Every cell is one full cross in one colour, which is what a converted picture needs. Add backstitch outlines by hand if you want them.'},
+            {q: 'How much floss do I need?', a: 'As a rough guide, one skein of six-strand DMC covers roughly 1,500 full crosses in two strands on 14-count. The chart gives the stitch count per colour so you can work it out.'},
+            {q: 'Is my image uploaded?', a: 'No. The conversion runs in your browser, and the last image you used stays in this browser only.'},
+        ],
+        metaTitle: 'Cross stitch pattern maker: photo to DMC chart',
+        metaDescription: 'Turn a photo into a cross stitch chart matched to real DMC floss numbers, with stitch counts, the finished size on 14-count Aida and a printable chart. Free.',
+    },
 }
 
 export const CRAFT_IDS = Object.keys(CRAFTS) as CraftId[]
 // Crafts with their own landing page, in menu order.
-export const BEADWORK_IDS: CraftId[] = ['kandi', 'loom', 'peyote', 'brick', 'friendship']
+export const BEADWORK_IDS: CraftId[] = ['pony', 'kandi', 'loom', 'peyote', 'brick', 'friendship']
 
-export const craftBySlug = (slug: string) => BEADWORK_IDS.map(id => CRAFTS[id]).find(c => c.slug === slug) ?? null
+// Every craft with its own landing page, beadwork or not (cross stitch is not).
+export const craftBySlug = (slug: string) => (slug ? CRAFT_IDS.map(id => CRAFTS[id]).find(c => c.slug === slug) : null) ?? null
 export const isCraftId = (v: unknown): v is CraftId => CRAFT_IDS.includes(v as CraftId)
+
+// What one cell is called. The palette usually knows (a bead, a DMC knot), but
+// a craft can override it: DMC floss is knots on a bracelet, stitches on Aida.
+export const unitOf = (brand: {unit: 'bead' | 'knot'}, craft: Craft) => craft.unit ?? brand.unit
+// "stitch" is the one unit whose plural is not just an s.
+export const units = (unit: 'bead' | 'knot' | 'stitch', n = 2) =>
+    n === 1 ? unit : unit === 'stitch' ? 'stitches' : `${unit}s`
 
 // Drawn proportions of a cell: height / width.
 export const cellAspect = (c: Craft) => (c.cellMm ? c.cellMm.h / c.cellMm.w : 1)

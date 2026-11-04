@@ -1,7 +1,7 @@
 // Browser-only "pattern sheet" PNG: title, the pattern on its board, and the
 // colour list with counts, sized for sharing or printing on one page.
 import type {Brand} from './brands'
-import {cellAspect, type Craft} from './crafts'
+import {cellAspect, unitOf, units, type Craft} from './crafts'
 import {canvasSize, drawPattern, type ViewMode} from './draw'
 import {sizeParts} from './info'
 import {countBeads, type BeadGrid} from './pattern'
@@ -79,10 +79,11 @@ export async function patternSheet(grid: BeadGrid, brand: Brand, craft: Craft, t
     // Colour list with counts.
     let ly = by + boardH + 70
     ctx.fillStyle = INK; ctx.font = `700 34px ${FONT}`
-    ctx.fillText(brand.unit === 'knot' ? 'Floss you need' : 'Beads you need', PAD, ly)
+    const noun = unitOf(brand, craft)
+    ctx.fillText(noun === 'bead' ? 'Beads you need' : 'Floss you need', PAD, ly)
     const total = counts.reduce((s, c) => s + c.count, 0)
     ctx.fillStyle = MUTED; ctx.font = `400 24px ${FONT}`; ctx.textAlign = 'right'
-    ctx.fillText(`${total.toLocaleString('en')} ${brand.unit}s, ${counts.length} colour${counts.length === 1 ? '' : 's'}`, W - PAD, ly)
+    ctx.fillText(`${total.toLocaleString('en')} ${units(noun, total)}, ${counts.length} colour${counts.length === 1 ? '' : 's'}`, W - PAD, ly)
     ctx.textAlign = 'left'
     ly += 44
     const colW = (W - 2 * PAD - (cols - 1) * 24) / cols

@@ -101,6 +101,18 @@ function sprite(hex: string, shape: Shape, cw: number, ch: number, scale: number
         ctx.beginPath()
         ctx.roundRect(ix, iy, w - 2 * ix, h - 2 * iy, Math.min(w, h) * 0.22)
         ctx.fill()
+    } else if (shape === 'cross') {
+        // A cross stitch: two strands of floss crossing over one Aida square.
+        ctx.strokeStyle = shade(hex, -0.04)
+        ctx.lineWidth = Math.max(1, Math.min(w, h) * 0.34)
+        ctx.lineCap = 'round'
+        const ix = w * 0.2, iy = h * 0.2
+        ctx.beginPath()
+        ctx.moveTo(ix, iy)
+        ctx.lineTo(w - ix, h - iy)
+        ctx.moveTo(w - ix, iy)
+        ctx.lineTo(ix, h - iy)
+        ctx.stroke()
     } else {
         // A knot: two strands crossing into a V.
         ctx.fillStyle = shade(hex, -0.1)
