@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {LOCALES, type Locale} from '~/helper/i18n/locales'
+import {LOCALES, englishParts, type Locale} from '~/helper/i18n/locales'
 import {PAGES, localePath, type LocalePage} from '~/helper/i18n/pages'
 
 const props = defineProps<{ locale: Locale; page: LocalePage }>()
 const ui = computed(() => LOCALES[props.locale].ui)
+const english = computed(() => englishParts(ui.value))
 const others = computed(() => PAGES[props.locale].filter(p => p.slug !== props.page.slug))
 </script>
 
@@ -23,7 +24,7 @@ const others = computed(() => PAGES[props.locale].filter(p => p.slug !== props.p
       <nav class="tags" :aria-label="ui.more">
         <NuxtLink v-for="p in others" :key="p.slug" :to="localePath(locale, p)" class="tag">{{ p.h1 }}</NuxtLink>
       </nav>
-      <p class="stack-top muted">{{ ui.englishNote }} <NuxtLink :to="page.en">{{ ui.englishLink }}</NuxtLink>.</p>
+      <p class="stack-top muted">{{ english.before }}<NuxtLink :to="page.en">{{ ui.englishLink }}</NuxtLink>{{ english.after }}</p>
     </div>
   </section>
 

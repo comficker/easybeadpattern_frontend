@@ -14,7 +14,7 @@ const MAP = {
   info: 'InfoCircle', options: 'Setting4', swap: 'Repeat', refresh: 'Refresh2', play: 'Play', pause: 'Pause', heart: 'Heart', search: 'SearchNormal1',
   filter: 'Filter', more: 'More', add: 'Add', minus: 'Minus', eye: 'Eye', share: 'Share', save: 'Save2', user: 'ProfileCircle',
   login: 'Login', printer: 'Printer', ruler: 'Ruler', magic: 'MagicStar', home: 'Home2', menu: 'HambergerMenu', task: 'TaskSquare',
-  box: 'BoxAdd', timer: 'Timer1', layers: 'Layer', edit: 'Edit2', export: 'ExportSquare', book: 'Book1', lamp: 'LampOn', star: 'Star1',
+  box: 'BoxAdd', timer: 'Timer1', layers: 'Layer', edit: 'Edit2', export: 'ExportSquare', book: 'Book1', lamp: 'LampOn', star: 'Star1', global: 'Global',
 }
 mkdirSync('out', {recursive: true})
 for (const [name, comp] of Object.entries(MAP)) {

@@ -184,6 +184,13 @@ h3 { font-size: var(--text-base); line-height: 1.3; font-weight: 600; }
 .site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-1); }
 .site-footer a { text-decoration: none; }
 .site-footer a:hover { color: var(--ink); }
+.site-footer .footer-english { margin: var(--sp-5) 0 0; }
+/* The language list is one full-width row, not a twelfth column: as a column it
+   was taller than the rest of the footer put together. */
+.site-footer .footer-langs { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--line); }
+.site-footer .footer-langs .footer-title { display: flex; align-items: center; gap: var(--sp-2); }
+.site-footer .footer-langs ul { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+.site-footer .footer-langs a.on { color: var(--ink); }
 .site-footer .credit { margin-top: var(--sp-6); font-size: var(--text-xs); }
 
 /* ---- Page heads ------------------------------------------------------------ */
@@ -201,8 +208,10 @@ h3 { font-size: var(--text-base); line-height: 1.3; font-weight: 600; }
 }
 .bench-side {
     padding: var(--sp-4); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); align-content: start; min-width: 0;
-    /* The board alone sets the row height: size-contained panels can't stretch it; they scroll. */
-    contain: size; overflow: auto; overscroll-behavior: contain;
+    /* The board alone sets the row height: size-contained panels can't stretch it; they scroll.
+       The scroll must chain: trapping the wheel here left anyone with the pointer
+       over the settings unable to scroll the page at all. */
+    contain: size; overflow: auto;
 }
 .bench-side + .bench-stage, .bench-stage + .bench-side { border-left: 1px solid var(--line); }
 /* The pegboard is always square. */

@@ -25,11 +25,32 @@ export interface LocaleUi {
     steps: string
     more: string
     faq: string
-    // Links to the English site for the tools that are not translated.
-    englishNote: string
+    // Points at the English site for the tools that are not translated. The
+    // sentence holds its own link position, spacing and full stop: Japanese
+    // ends in 。 and sets no space around the link, and the template must not
+    // decide either of those.
+    english: string
     englishLink: string
     // Title of the saved pattern inside the workbench.
     patternTitle: string
+    // Footer. The tool pages themselves are English, so the footer names them
+    // in this language and the English note below the columns says as much.
+    footer: {
+        makers: string
+        maker: (brand: string) => string
+        charts: string
+        chart: (brand: string) => string
+        // Heading over the sibling sites, whose names need no translating.
+        tools: string
+        patterns: string
+        all: string
+        themes: string
+        easy: string
+        medium: string
+        hard: string
+        // Heading of the language row, which every page carries.
+        languages: string
+    }
 }
 
 export interface LocaleMeta {
@@ -55,9 +76,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Vom Foto zur Stiftplatte',
             more: 'Weitere Seiten auf Deutsch',
             faq: 'Häufige Fragen',
-            englishNote: 'Alle Werkzeuge — Kandi, Webrahmen, Peyote, Kreuzstich — gibt es auf',
+            english: 'Alle Werkzeuge — Kandi, Webrahmen, Peyote, Kreuzstich — gibt es auf {link}.',
             englishLink: 'der englischen Seite',
             patternTitle: 'Meine Vorlage',
+            footer: {
+                makers: 'Vorlagen-Generatoren', maker: b => `${b} Vorlagen`,
+                charts: 'Farbtabellen', chart: b => `${b} Farbtabelle`,
+                tools: 'Weitere Tools',
+                patterns: 'Vorlagen', all: 'Alle Vorlagen', themes: 'Themen A bis Z',
+                easy: 'Einfache Vorlagen', medium: 'Mittlere Vorlagen', hard: 'Schwere Vorlagen',
+                languages: 'Sprache',
+            },
         },
     },
     ja: {
@@ -71,9 +100,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: '写真から図案をつくる',
             more: '日本語のほかのページ',
             faq: 'よくある質問',
-            englishNote: 'カンディ、ビーズ織り、ペヨーテ、クロスステッチなどの道具は',
+            english: 'カンディ、ビーズ織り、ペヨーテ、クロスステッチなどの道具は{link}にあります。',
             englishLink: '英語版のページ',
             patternTitle: 'わたしの図案',
+            footer: {
+                makers: '図案メーカー', maker: b => `${b} の図案`,
+                charts: 'カラーチャート', chart: b => `${b} のカラーチャート`,
+                tools: 'ほかのツール',
+                patterns: '図案', all: 'すべての図案', themes: 'テーマ A–Z',
+                easy: 'やさしい図案', medium: 'ふつうの図案', hard: 'むずかしい図案',
+                languages: '言語',
+            },
         },
     },
     pt: {
@@ -87,9 +124,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Da foto à placa',
             more: 'Outras páginas em português',
             faq: 'Perguntas frequentes',
-            englishNote: 'As outras ferramentas — kandi, tear, peyote, ponto cruz — estão',
+            english: 'As outras ferramentas — kandi, tear, peyote, ponto cruz — estão {link}.',
             englishLink: 'na versão em inglês',
             patternTitle: 'Meu molde',
+            footer: {
+                makers: 'Geradores de molde', maker: b => `Moldes ${b}`,
+                charts: 'Tabelas de cores', chart: b => `Tabela de cores ${b}`,
+                tools: 'Mais ferramentas',
+                patterns: 'Moldes', all: 'Todos os moldes', themes: 'Temas de A a Z',
+                easy: 'Moldes fáceis', medium: 'Moldes médios', hard: 'Moldes difíceis',
+                languages: 'Idioma',
+            },
         },
     },
     fr: {
@@ -103,9 +148,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'De la photo à la plaque',
             more: 'Autres pages en français',
             faq: 'Questions fréquentes',
-            englishNote: 'Les autres outils — kandi, métier à tisser, peyote, point de croix — sont sur',
+            english: 'Les autres outils — kandi, métier à tisser, peyote, point de croix — sont sur {link}.',
             englishLink: 'la version anglaise',
             patternTitle: 'Mon modèle',
+            footer: {
+                makers: 'Générateurs de modèles', maker: b => `Modèles ${b}`,
+                charts: 'Nuanciers', chart: b => `Nuancier ${b}`,
+                tools: 'Autres outils',
+                patterns: 'Modèles', all: 'Tous les modèles', themes: 'Thèmes de A à Z',
+                easy: 'Modèles faciles', medium: 'Modèles moyens', hard: 'Modèles difficiles',
+                languages: 'Langue',
+            },
         },
     },
     es: {
@@ -119,9 +172,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'De la foto a la placa',
             more: 'Otras páginas en español',
             faq: 'Preguntas frecuentes',
-            englishNote: 'Las demás herramientas — kandi, telar, peyote, punto de cruz — están en',
+            english: 'Las demás herramientas — kandi, telar, peyote, punto de cruz — están en {link}.',
             englishLink: 'la versión en inglés',
             patternTitle: 'Mi plantilla',
+            footer: {
+                makers: 'Generadores de plantillas', maker: b => `Plantillas ${b}`,
+                charts: 'Cartas de colores', chart: b => `Carta de colores ${b}`,
+                tools: 'Más herramientas',
+                patterns: 'Plantillas', all: 'Todas las plantillas', themes: 'Temas de la A a la Z',
+                easy: 'Plantillas fáciles', medium: 'Plantillas medias', hard: 'Plantillas difíciles',
+                languages: 'Idioma',
+            },
         },
     },
     nl: {
@@ -135,9 +196,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Van foto naar grondplaat',
             more: 'Andere pagina’s in het Nederlands',
             faq: 'Veelgestelde vragen',
-            englishNote: 'De andere tools — kandi, weefraam, peyote, kruissteek — staan op',
+            english: 'De andere tools — kandi, weefraam, peyote, kruissteek — staan op {link}.',
             englishLink: 'de Engelse site',
             patternTitle: 'Mijn patroon',
+            footer: {
+                makers: 'Patroonmakers', maker: b => `${b} patronen`,
+                charts: 'Kleurenkaarten', chart: b => `${b} kleurenkaart`,
+                tools: 'Meer tools',
+                patterns: 'Patronen', all: 'Alle patronen', themes: 'Thema’s van A tot Z',
+                easy: 'Makkelijke patronen', medium: 'Gemiddelde patronen', hard: 'Moeilijke patronen',
+                languages: 'Taal',
+            },
         },
     },
     pl: {
@@ -151,9 +220,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Od zdjęcia do podkładki',
             more: 'Inne strony po polsku',
             faq: 'Częste pytania',
-            englishNote: 'Pozostałe narzędzia — kandi, krosno, peyote, haft krzyżykowy — są na',
+            english: 'Pozostałe narzędzia — kandi, krosno, peyote, haft krzyżykowy — są na {link}.',
             englishLink: 'stronie angielskiej',
             patternTitle: 'Mój wzór',
+            footer: {
+                makers: 'Generatory wzorów', maker: b => `Wzory ${b}`,
+                charts: 'Tabele kolorów', chart: b => `Tabela kolorów ${b}`,
+                tools: 'Więcej narzędzi',
+                patterns: 'Wzory', all: 'Wszystkie wzory', themes: 'Tematy od A do Z',
+                easy: 'Łatwe wzory', medium: 'Średnie wzory', hard: 'Trudne wzory',
+                languages: 'Język',
+            },
         },
     },
     sv: {
@@ -167,9 +244,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Från foto till pärlplatta',
             more: 'Fler sidor på svenska',
             faq: 'Vanliga frågor',
-            englishNote: 'De andra verktygen — kandi, vävstol, peyote, korsstygn — finns på',
+            english: 'De andra verktygen — kandi, vävstol, peyote, korsstygn — finns på {link}.',
             englishLink: 'den engelska sidan',
             patternTitle: 'Min mall',
+            footer: {
+                makers: 'Mallgeneratorer', maker: b => `${b} mallar`,
+                charts: 'Färgkartor', chart: b => `${b} färgkarta`,
+                tools: 'Fler verktyg',
+                patterns: 'Mallar', all: 'Alla mallar', themes: 'Teman A till Ö',
+                easy: 'Lätta mallar', medium: 'Medelsvåra mallar', hard: 'Svåra mallar',
+                languages: 'Språk',
+            },
         },
     },
     da: {
@@ -183,9 +268,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Fra foto til perleplade',
             more: 'Flere sider på dansk',
             faq: 'Ofte stillede spørgsmål',
-            englishNote: 'De andre værktøjer — kandi, perlevæv, peyote, korssting — findes på',
+            english: 'De andre værktøjer — kandi, perlevæv, peyote, korssting — findes på {link}.',
             englishLink: 'den engelske side',
             patternTitle: 'Mit mønster',
+            footer: {
+                makers: 'Mønstergeneratorer', maker: b => `${b} mønstre`,
+                charts: 'Farvekort', chart: b => `${b} farvekort`,
+                tools: 'Flere værktøjer',
+                patterns: 'Mønstre', all: 'Alle mønstre', themes: 'Temaer fra A til Å',
+                easy: 'Lette mønstre', medium: 'Mellemsvære mønstre', hard: 'Svære mønstre',
+                languages: 'Sprog',
+            },
         },
     },
     no: {
@@ -199,9 +292,17 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Fra foto til perlebrett',
             more: 'Flere sider på norsk',
             faq: 'Vanlige spørsmål',
-            englishNote: 'De andre verktøyene — kandi, perlevev, peyote, korssting — finnes på',
+            english: 'De andre verktøyene — kandi, perlevev, peyote, korssting — finnes på {link}.',
             englishLink: 'den engelske siden',
             patternTitle: 'Mitt mønster',
+            footer: {
+                makers: 'Mønstergeneratorer', maker: b => `${b} mønstre`,
+                charts: 'Fargekart', chart: b => `${b} fargekart`,
+                tools: 'Flere verktøy',
+                patterns: 'Mønstre', all: 'Alle mønstre', themes: 'Temaer fra A til Å',
+                easy: 'Lette mønstre', medium: 'Middels mønstre', hard: 'Vanskelige mønstre',
+                languages: 'Språk',
+            },
         },
     },
     it: {
@@ -215,12 +316,26 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             steps: 'Dalla foto alla base',
             more: 'Altre pagine in italiano',
             faq: 'Domande frequenti',
-            englishNote: 'Gli altri strumenti — kandi, telaio, peyote, punto croce — sono sul',
+            english: 'Gli altri strumenti — kandi, telaio, peyote, punto croce — sono sul {link}.',
             englishLink: 'sito in inglese',
             patternTitle: 'Il mio schema',
+            footer: {
+                makers: 'Generatori di schemi', maker: b => `Schemi ${b}`,
+                charts: 'Tabelle colori', chart: b => `Tabella colori ${b}`,
+                tools: 'Altri strumenti',
+                patterns: 'Schemi', all: 'Tutti gli schemi', themes: 'Temi dalla A alla Z',
+                easy: 'Schemi facili', medium: 'Schemi medi', hard: 'Schemi difficili',
+                languages: 'Lingua',
+            },
         },
     },
 }
 
 export const LOCALE_CODES = Object.keys(LOCALES) as Locale[]
 export const isLocale = (v: unknown): v is Locale => LOCALE_CODES.includes(v as Locale)
+
+// The sentence that points at the English site, split around its link.
+export function englishParts(ui: LocaleUi) {
+    const [before = '', after = ''] = ui.english.split('{link}')
+    return {before, after}
+}
