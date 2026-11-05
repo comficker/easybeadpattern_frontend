@@ -3,6 +3,7 @@ import {FONT_HEIGHT, GLYPHS, normalise, textToSource} from '../app/helper/beads/
 import {decodeDone, encodeDone, patternKey} from '../app/helper/beads/progress'
 import {gridToArt} from '../app/helper/beads/share'
 import {BRAND_IDS, getBrand} from '../app/helper/beads/brands'
+import {displayName, nameAll} from '../app/helper/names'
 import {applyEdits, applySwaps, boardLabel, boardsOf, countBeads, floodRegion, gridFromMapNumbers, lineCells, matchToBeads, wordChart} from '../app/helper/beads/pattern'
 
 describe('brands', () => {
@@ -233,5 +234,66 @@ describe('save to library', () => {
         expect(art.map_numbers).toEqual({'0_0': 0, '2_0': 0, '0_1': 1, '1_1': 1})
         const back = matchToBeads(gridFromMapNumbers(3, 2, art.colors, art.map_numbers), perler, {maxColors: 10, includeSpecial: true})
         expect([...back.cells]).toEqual([...g.cells])
+    })
+})
+
+describe('pattern names', () => {
+    const art = (id: number, name: string, width = 16, height = 16) => ({id, name, width, height})
+
+    test('a name of its own is left alone', () => {
+        expect(displayName(art(7, 'Charmander'))).toBe('Charmander')
+        expect(nameAll([art(7, 'Charmander'), art(8, 'Bulbasaur')]).map(a => a.name))
+            .toEqual(['Charmander', 'Bulbasaur'])
+    })
+
+    test('no name, or a name that is just "Untitled", falls back to the id', () => {
+        expect(displayName(art(7, ''))).toBe('Untitled 7')
+        expect(displayName(art(7, '   '))).toBe('Untitled 7')
+        expect(displayName({id: 7, name: null as unknown as string})).toBe('Untitled 7')
+        expect(displayName(art(7, 'Untitled'))).toBe('Untitled 7')
+        expect(displayName(art(7, 'UNTITLED'))).toBe('Untitled 7')
+        expect(displayName(art(7, 'untitled '))).toBe('Untitled 7')
+        // Only the bare word: a real title starting with it keeps its name.
+        expect(displayName(art(7, 'Untitled sunset'))).toBe('Untitled sunset')
+    })
+
+    test('the same name at the same size is split by id, and only then', () => {
+        const [a, b, c] = nameAll([art(1, 'Charmander'), art(2, 'Charmander'), art(3, 'Charmander', 32, 32)])
+        // 1 and 2 would have produced one title; 3 is told apart by its size,
+        // which the title already carries, so it keeps the clean name.
+        expect([a!.name, b!.name]).toEqual(['Charmander 1', 'Charmander 2'])
+        expect(c!.name).toBe('Charmander')
+    })
+
+    test('names that differ only in case still count as the same name', () => {
+        expect(nameAll([art(1, 'Pikachu'), art(2, 'pikachu')]).map(a => a.name))
+            .toEqual(['Pikachu 1', 'pikachu 2'])
+    })
+
+    test('every name in a library of duplicates comes out unique', () => {
+        const arts = [
+            art(1, ''), art(2, ''), art(3, 'Untitled'), art(4, 'untitled'),
+            art(5, 'Stone pickaxe'), art(6, 'Stone pickaxe'), art(7, 'Stone pickaxe', 29, 29),
+            art(8, 'Board 1'),
+        ]
+        const names = nameAll(arts).map(a => a.name)
+        expect(new Set(names).size).toBe(arts.length)
+        expect(names).toContain('Untitled 3')
+        expect(names).toContain('Board 1')
+    })
+
+    test('an id that lands on a name already taken keeps going', () => {
+        // Real case: the library holds "Plane" (id 2) and "Plane 2", both 32 x 32.
+        const names = nameAll([art(2, 'Plane', 32, 32), art(9, 'Plane', 32, 32), art(5, 'Plane 2', 32, 32)])
+            .map(a => a.name)
+        expect(new Set(names.map(n => n.toLowerCase())).size).toBe(3)
+        expect(names).toContain('Plane 9')
+        expect(names).toContain('Plane 2')
+    })
+
+    test('the input is not mutated', () => {
+        const arts = [art(1, ''), art(2, 'Charmander'), art(3, 'Charmander')]
+        nameAll(arts)
+        expect(arts.map(a => a.name)).toEqual(['', 'Charmander', 'Charmander'])
     })
 })

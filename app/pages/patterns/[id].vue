@@ -28,7 +28,9 @@ const initialCraft = isCraftId(route.query.craft) ? route.query.craft : 'fuse'
 const source = computed(() => art.value && gridFromMapNumbers(art.value.width, art.value.height, art.value.colors || [], art.value.map_numbers || {}))
 const a = art.value!
 const e = entry.value!
-const name = patternName(a)
+// The catalog entry, not the backend row: its name is already settled against
+// the rest of the library, so same-named patterns do not share a title.
+const name = patternName(e)
 const size = `${e.width}x${e.height}`
 const level = LEVELS[e.level]
 const tags = computed(() => a.taxonomies.map(t => ({...t, count: e.tagCounts?.[t.id_string]})))

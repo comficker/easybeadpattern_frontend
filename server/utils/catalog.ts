@@ -4,6 +4,8 @@
 // derive them here than to add endpoints. Revisit once the library reaches
 // several thousand arts: the full payload is ~9 KB per art.
 
+import {nameAll} from '../../app/helper/names'
+
 export type Level = 'easy' | 'medium' | 'hard'
 
 export interface CatalogItem {
@@ -94,9 +96,13 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     }
     items.sort((a, b) => b.id - a.id)
 
+    // Names are settled here, once, so every page and listing says the same
+    // thing and nothing downstream has to know about the library's duplicates.
+    const named = nameAll(items)
+
     const tagCount = new Map<string, number>()
     const pairs = new Map<string, Map<string, number>>()
-    for (const it of items) {
+    for (const it of named) {
         for (const t of it.tags) {
             tagCount.set(t, (tagCount.get(t) || 0) + 1)
             const m = pairs.get(t) || new Map<string, number>()
@@ -113,7 +119,7 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
 
     const sizeCount = new Map<string, CatalogSize>()
-    for (const it of items) {
+    for (const it of named) {
         const size = `${it.width}x${it.height}`
         const s = sizeCount.get(size) || {size, width: it.width, height: it.height, count: 0}
         s.count++
@@ -122,8 +128,8 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     const sizes = [...sizeCount.values()].sort((a, b) => b.count - a.count || a.width - b.width)
 
     const levels = {easy: 0, medium: 0, hard: 0}
-    for (const it of items) levels[it.level]++
+    for (const it of named) levels[it.level]++
 
-    return {items, tags, sizes, levels}
+    return {items: named, tags, sizes, levels}
 // The filter is part of the key, so changing it never serves a stale catalog.
 }, {name: 'catalog', getKey: () => `w${MAX_WIDTH}`, maxAge: 60 * 60, swr: true})

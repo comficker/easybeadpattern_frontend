@@ -1,3 +1,5 @@
+import {displayName} from '~/helper/names'
+
 export type Level = 'easy' | 'medium' | 'hard'
 
 export interface ArtRow {
@@ -77,12 +79,10 @@ export function artThumb(art: Pick<ArtRow, 'id_string' | 'updated'>, size = 'art
     return `${apiBase()}/coloring/files/${size}/${art.id_string}.png${Number.isFinite(v) ? `?v=${v}` : ''}`
 }
 
-// A few arts in the shared library have no name. Falling back to the id keeps
-// every title unique: two unnamed 16 × 16 arts used to ship the same <title>,
-// and the word "null" with it.
+// Rows from /api/patterns already carry their settled name (see helper/names),
+// so this only has to catch an art read straight from the backend.
 export function patternName(art: Pick<ArtRow, 'name' | 'id'>) {
-    const n = (art.name ?? '').trim()
-    return n || `Untitled ${art.id}`
+    return displayName(art)
 }
 
 // Patterns from the site's own catalog (server/utils/catalog.ts).
