@@ -363,7 +363,7 @@ export const PAGES: Record<Locale, LocalePage[]> = {
         {slug: 'hama-perler-moenstre', en: '/hama-bead-pattern-maker', kind: 'maker', brand: 'hama',
             h1: 'Mønstre til Hama perler',
             intro: 'Billedet bliver matchet mod de rigtige Hama Midi-farver med deres H-koder, så indkøbslisten passer til æskerne i butikken.',
-            metaTitle: 'Hama perler mønster fra foto',
+            metaTitle: 'Hama perler mønster ud fra et foto',
             metaDescription: 'Lav et mønster til Hama perler ud fra et foto, matchet mod de rigtige Hama Midi-farver med H-koder, med antal perler per farve og en side per plade.',
             steps: DA_STEPS, faq: DA_FAQ},
         {slug: 'moenstre', en: '/patterns', kind: 'gallery',
