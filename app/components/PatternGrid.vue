@@ -14,8 +14,8 @@ const meta = (a: ArtRow) => props.lang === 'de'
     ? `${a.width} × ${a.height} Perlen, ${a.colors} Farbe${a.colors > 1 ? 'n' : ''}`
     : `${a.width} × ${a.height} beads, ${a.colors} colour${a.colors > 1 ? 's' : ''}`
 const alt = (a: ArtRow) => props.lang === 'de'
-    ? `Bügelperlen-Vorlage ${a.name}, ${a.width} mal ${a.height} Perlen`
-    : `${a.name} bead pattern, ${a.width} by ${a.height} beads`
+    ? `Bügelperlen-Vorlage ${patternName(a)}, ${a.width} mal ${a.height} Perlen`
+    : `${patternName(a)} bead pattern, ${a.width} by ${a.height} beads`
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const alt = (a: ArtRow) => props.lang === 'de'
     <NuxtLink v-for="(a, i) in items" :key="a.id" :to="craft ? {path: `/patterns/${a.id_string}`, query: {craft}} : `/patterns/${a.id_string}`" class="pcard">
       <div class="pcard-img"><img :src="artThumb(a)" :alt="alt(a)" :loading="i < 6 ? 'eager' : 'lazy'" :fetchpriority="i < 2 ? 'high' : undefined" width="160" height="160"></div>
       <div>
-        <component :is="`h${level}`" class="pcard-title">{{ a.name }}</component>
+        <component :is="`h${level}`" class="pcard-title">{{ patternName(a) }}</component>
         <p>{{ meta(a) }}</p>
       </div>
     </NuxtLink>

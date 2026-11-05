@@ -77,6 +77,14 @@ export function artThumb(art: Pick<ArtRow, 'id_string' | 'updated'>, size = 'art
     return `${apiBase()}/coloring/files/${size}/${art.id_string}.png${Number.isFinite(v) ? `?v=${v}` : ''}`
 }
 
+// A few arts in the shared library have no name. Falling back to the id keeps
+// every title unique: two unnamed 16 × 16 arts used to ship the same <title>,
+// and the word "null" with it.
+export function patternName(art: Pick<ArtRow, 'name' | 'id'>) {
+    const n = (art.name ?? '').trim()
+    return n || `Untitled ${art.id}`
+}
+
 // Patterns from the site's own catalog (server/utils/catalog.ts).
 // `key` must not contain a route path: it ends up in the SSR payload.
 export function usePatterns(key: string, filter: Ref<PatternFilter>) {

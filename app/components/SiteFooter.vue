@@ -46,11 +46,10 @@ import {GUIDES} from '~/helper/guides'
           </ul>
         </div>
         <div>
-          <h2 class="footer-title">More free tools from Ninosaur</h2>
+          <h2 class="footer-title">More tools</h2>
           <ul>
-            <li><a href="https://simplepixelart.com">SimplePixelArt — draw pixel art</a></li>
-            <li><a href="https://squarecoloring.com">SquareColoring — colour by number</a></li>
-            <li><a href="https://freegraphpaper.net">FreeGraphPaper — printable grid paper</a></li>
+            <li><a href="https://simplepixelart.com">SimplePixelArt</a></li>
+            <li><a href="https://freegraphpaper.net">FreeGraphPaper</a></li>
           </ul>
           <h2 class="footer-title stack-top">Deutsch</h2>
           <ul>

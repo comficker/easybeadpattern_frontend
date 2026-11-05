@@ -28,25 +28,26 @@ const initialCraft = isCraftId(route.query.craft) ? route.query.craft : 'fuse'
 const source = computed(() => art.value && gridFromMapNumbers(art.value.width, art.value.height, art.value.colors || [], art.value.map_numbers || {}))
 const a = art.value!
 const e = entry.value!
+const name = patternName(a)
 const size = `${e.width}x${e.height}`
 const level = LEVELS[e.level]
 const tags = computed(() => a.taxonomies.map(t => ({...t, count: e.tagCounts?.[t.id_string]})))
 const site = useRuntimeConfig().public.siteUrl as string
 
 // Size in the title keeps same-named patterns apart and matches "16x16" searches.
-const seoTitle = `${a.name} bead pattern, ${a.width}×${a.height}`
+const seoTitle = `${name} bead pattern, ${a.width}×${a.height}`
 useSeo({
     title: seoTitle,
-    description: `Free ${a.name} bead pattern: ${a.width} × ${a.height}, ${e.beads} beads in ${e.colors} colours, ${level.name.toLowerCase()}. Open it in Perler, Hama or Artkal and print it.`,
+    description: `Free ${name} bead pattern: ${a.width} × ${a.height}, ${e.beads} beads in ${e.colors} colour${e.colors === 1 ? '' : 's'}, ${level.name.toLowerCase()}. Open it in Perler, Hama or Artkal and print it.`,
     path: `/patterns/${a.id_string}`,
     image: artThumb(a, 'art-social'),
-    imageAlt: `${a.name} bead pattern, ${a.width} by ${a.height} beads`,
+    imageAlt: `${name} bead pattern, ${a.width} by ${a.height} beads`,
     type: 'article',
     jsonLd: [
         {
             '@context': 'https://schema.org',
             '@type': 'CreativeWork',
-            name: `${a.name} bead pattern`,
+            name: `${name} bead pattern`,
             description: a.desc || undefined,
             image: artThumb(a, 'art-social'),
             url: `${site}/patterns/${a.id_string}`,
@@ -58,7 +59,7 @@ useSeo({
         ldBreadcrumbs([
             {name: 'Patterns', path: '/patterns'},
             ...(a.taxonomies[0] ? [{name: `${a.taxonomies[0].name} bead patterns`, path: `/patterns/tag/${a.taxonomies[0].id_string}`}] : []),
-            {name: a.name},
+            {name},
         ]),
     ],
 })
@@ -71,9 +72,9 @@ useSeo({
         <p class="crumbs">
           <NuxtLink to="/patterns">Patterns</NuxtLink> /
           <template v-if="art.taxonomies[0]"><NuxtLink :to="`/patterns/tag/${art.taxonomies[0].id_string}`">{{ art.taxonomies[0].name }}</NuxtLink> / </template>
-          {{ art.name }}
+          {{ name }}
         </p>
-        <h1>{{ art.name }} bead pattern</h1>
+        <h1>{{ name }} bead pattern</h1>
         <p>
           <NuxtLink :to="`/patterns/size/${size}`">{{ sizeLabel(size) }} beads</NuxtLink>,
           {{ e.beads }} beads in {{ e.colors }} colour{{ e.colors > 1 ? 's' : '' }},
@@ -83,7 +84,7 @@ useSeo({
       </div>
     </section>
     <div class="wrap">
-      <PatternWorkbench :source="source" :title="art.name" craft-switch :initial-craft="initialCraft" />
+      <PatternWorkbench :source="source" :title="name" craft-switch :initial-craft="initialCraft" />
     </div>
     <section class="section">
       <div class="wrap"><div class="prose">

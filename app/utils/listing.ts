@@ -20,11 +20,11 @@ export const pageSuffix = (page: number) => (page > 1 ? `, page ${page}` : '')
 export const pageQuery = (page: number) => (page > 1 ? `?page=${page}` : '')
 
 // JSON-LD for a page of patterns, and the first pattern as the share image.
-export function listingSeo(results: { name: string; id_string: string; updated: string }[] | undefined) {
+export function listingSeo(results: { name: string; id: number; id_string: string; updated: string }[] | undefined) {
     const items = (results ?? []).slice(0, 24)
     return {
         image: items[0] ? artThumb(items[0], 'art-social') : undefined,
-        itemList: ldItemList(items.map(a => ({name: `${a.name} bead pattern`, path: `/patterns/${a.id_string}`, image: artThumb(a)}))),
+        itemList: ldItemList(items.map(a => ({name: `${patternName(a)} bead pattern`, path: `/patterns/${a.id_string}`, image: artThumb(a)}))),
     }
 }
 
