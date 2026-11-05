@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DE_FOR_EN, deAlternates} from '~/helper/de'
+import {alternatesFor} from '~/helper/i18n/pages'
 
 const route = useRoute()
 const page = computed(() => Math.max(1, Number(route.query.page) || 1))
@@ -15,7 +15,7 @@ useSeo({
     path: `/patterns${pageQuery(page.value)}`,
     image: ls.image,
     // Page 2 and on are their own series, not a translation pair.
-    alternates: page.value === 1 ? deAlternates(DE_FOR_EN('/patterns')!) : undefined,
+    alternates: page.value === 1 ? alternatesFor('/patterns') : undefined,
     jsonLd: [ls.itemList, ldBreadcrumbs([{name: 'Home', path: '/'}, {name: 'Patterns'}])],
 })
 </script>

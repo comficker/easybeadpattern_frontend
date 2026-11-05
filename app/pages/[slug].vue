@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {brandBySlug} from '~/helper/beads/brands'
 import {CRAFTS, craftBySlug} from '~/helper/beads/crafts'
-import {DE_FOR_EN, deAlternates} from '~/helper/de'
+import {alternatesFor, translationsOf} from '~/helper/i18n/pages'
 
 const route = useRoute()
 const slug = String(route.params.slug)
@@ -10,7 +10,7 @@ const brand = brandBySlug(slug)
 const craft = brand ? null : craftBySlug(slug)
 if (!brand && !craft) throw createError({statusCode: 404, statusMessage: 'Page not found', fatal: true})
 
-const de = DE_FOR_EN(`/${slug}`)
+const translations = translationsOf(`/${slug}`)
 if (brand) {
     const description = `Turn any image into a ${brand.line} pattern matched to ${brand.beads.length} real ${brand.name} colours, with a bead count and a page for every pegboard. Free.`
     useSeo({
@@ -18,8 +18,8 @@ if (brand) {
         description,
         path: `/${brand.slug}`,
         image: `/og/brand-${brand.id}.png`,
-        // Only the brands that have a German page claim a pair.
-        alternates: de ? deAlternates(de) : undefined,
+        // Only the brands that are translated somewhere claim a pair.
+        alternates: translations.length ? alternatesFor(`/${slug}`) : undefined,
         jsonLd: [
             ldTool(`${brand.name} bead pattern maker`, description, `/${brand.slug}`),
             ldFaq(CRAFTS.fuse.faq),

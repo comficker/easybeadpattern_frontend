@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {BRAND_IDS, CHART_IDS, getBrand} from '~/helper/beads/brands'
 import {BEADWORK_IDS, CRAFTS} from '~/helper/beads/crafts'
-import {DE_PAGES, dePath} from '~/helper/de'
+import {LOCALES, LOCALE_CODES} from '~/helper/i18n/locales'
+import {PAGES, localePath} from '~/helper/i18n/pages'
 import {GUIDES} from '~/helper/guides'
 </script>
 
@@ -51,9 +52,9 @@ import {GUIDES} from '~/helper/guides'
             <li><a href="https://simplepixelart.com">SimplePixelArt</a></li>
             <li><a href="https://freegraphpaper.net">FreeGraphPaper</a></li>
           </ul>
-          <h2 class="footer-title stack-top">Deutsch</h2>
+          <h2 class="footer-title stack-top">Languages</h2>
           <ul>
-            <li v-for="p in DE_PAGES" :key="p.slug"><NuxtLink :to="dePath(p)">{{ p.h1 }}</NuxtLink></li>
+            <li v-for="c in LOCALE_CODES" :key="c"><NuxtLink :to="localePath(c, PAGES[c][0]!)">{{ LOCALES[c].name }}</NuxtLink></li>
           </ul>
         </div>
       </div>

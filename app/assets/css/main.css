@@ -37,6 +37,9 @@
     --focus: #3D6BFF;
 
     --font: 'Rubik', 'Rubik Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    /* Latin text stays Rubik everywhere. Japanese has no Rubik subset, so the
+       Japanese pages fall back to the reader's own system CJK face rather than
+       pulling a multi-megabyte web font. */
     --text-xs: 12px;
     --text-sm: 13px;
     --text-md: 14px;
@@ -64,6 +67,10 @@
     --r-pill: 999px;
     --gutter: var(--sp-4);
     color-scheme: light;
+}
+
+html[lang='ja'] {
+    --font: 'Rubik', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', Meiryo, 'Rubik Fallback', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {LOCALES, isLocale} from '~/helper/i18n/locales'
+import {PAGES, localePath} from '~/helper/i18n/pages'
 const {user, signInUrl} = useAuth()
 const route = useRoute()
 const EN = [
@@ -9,17 +11,28 @@ const EN = [
     {to: '/patterns', label: 'Patterns', icon: 'patterns'},
     {to: '/colors', label: 'Colours', icon: 'palette'},
 ]
-// On a German page the nav is German, and the two links that have a German
-// page point at it. The rest still lead to the English tools.
-const DE = [
-    {to: '/de/buegelperlen-vorlagen', label: 'Bügelperlen', icon: 'bead'},
-    {to: '/designer', label: 'Designer', icon: 'edit'},
-    {to: '/beadwork', label: 'Perlenarbeit', icon: 'beadwork'},
-    {to: '/bead-letters', label: 'Buchstaben', icon: 'text'},
-    {to: '/de/vorlagen', label: 'Vorlagen', icon: 'patterns'},
-    {to: '/colors', label: 'Farben', icon: 'palette'},
-]
-const LINKS = computed(() => (route.path.startsWith('/de/') ? DE : EN))
+// On a translated page the nav is in that language, and the two entries that
+// have a translated page point at it. The rest still lead to the English tools.
+const localeOf = computed(() => {
+    const seg = route.path.split('/')[1]
+    return isLocale(seg) ? seg : null
+})
+const LINKS = computed(() => {
+    const l = localeOf.value
+    if (!l) return EN
+    const ui = LOCALES[l].ui
+    const pages = PAGES[l]
+    const home = pages[0]!
+    const gallery = pages.find(p => p.kind === 'gallery') ?? home
+    return [
+        {to: localePath(l, home), label: ui.nav.home, icon: 'bead'},
+        {to: '/designer', label: ui.nav.designer, icon: 'edit'},
+        {to: '/beadwork', label: ui.nav.beadwork, icon: 'beadwork'},
+        {to: '/bead-letters', label: ui.nav.letters, icon: 'text'},
+        {to: localePath(l, gallery), label: ui.nav.patterns, icon: 'patterns'},
+        {to: '/colors', label: ui.nav.colors, icon: 'palette'},
+    ]
+})
 </script>
 
 <template>

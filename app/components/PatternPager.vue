@@ -3,7 +3,7 @@ export interface PagerLabels { prev: string; next: string; of: (page: number, pa
 const props = defineProps<{
     page: number
     pages: number
-    // German pages pass their own wording; English is the default.
+    // Translated pages pass their own wording; English is the default.
     labels?: PagerLabels
 }>()
 const l = computed<PagerLabels>(() => props.labels ?? {prev: 'Previous', next: 'Next', of: (p, n) => `Page ${p} of ${n}`})

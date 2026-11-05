@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import type {ArtRow} from '~/composables/useApi'
+import {LOCALES, type Locale} from '~/helper/i18n/locales'
 
 const props = withDefaults(defineProps<{
     items: ArtRow[]
     craft?: string
     level?: 2 | 3
-    // German pages pass 'de'; the pattern names themselves come from the
-    // shared library and stay English.
-    lang?: 'en' | 'de'
+    // Translated pages pass their locale; the pattern names themselves come
+    // from the shared library and stay English.
+    locale?: Locale
 }>(), {level: 3})
 
-const meta = (a: ArtRow) => props.lang === 'de'
-    ? `${a.width} × ${a.height} Perlen, ${a.colors} Farbe${a.colors > 1 ? 'n' : ''}`
+const ui = computed(() => (props.locale ? LOCALES[props.locale].ui : null))
+const meta = (a: ArtRow) => ui.value
+    ? ui.value.card(a.width, a.height, a.colors)
     : `${a.width} × ${a.height} beads, ${a.colors} colour${a.colors > 1 ? 's' : ''}`
-const alt = (a: ArtRow) => props.lang === 'de'
-    ? `Bügelperlen-Vorlage ${patternName(a)}, ${a.width} mal ${a.height} Perlen`
+const alt = (a: ArtRow) => ui.value
+    ? ui.value.cardAlt(patternName(a), a.width, a.height)
     : `${patternName(a)} bead pattern, ${a.width} by ${a.height} beads`
 </script>
 

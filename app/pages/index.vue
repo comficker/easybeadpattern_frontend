@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {CRAFTS} from '~/helper/beads/crafts'
-import {DE_FOR_EN, deAlternates} from '~/helper/de'
+import {alternatesFor} from '~/helper/i18n/pages'
 
 const fuse = CRAFTS.fuse
 useSeo({
@@ -8,7 +8,7 @@ useSeo({
     description: fuse.metaDescription,
     path: '/',
     image: '/og/default.png',
-    alternates: deAlternates(DE_FOR_EN('/')!),
+    alternates: alternatesFor('/'),
     jsonLd: [ldTool('EasyBeadPattern bead pattern maker', fuse.metaDescription, '/'), ldFaq(fuse.faq)],
 })
 </script>
