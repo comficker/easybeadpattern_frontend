@@ -3,7 +3,7 @@ import {FONT_HEIGHT, GLYPHS, normalise, textToSource} from '../app/helper/beads/
 import {decodeDone, encodeDone, patternKey} from '../app/helper/beads/progress'
 import {gridToArt} from '../app/helper/beads/share'
 import {BRAND_IDS, getBrand} from '../app/helper/beads/brands'
-import {displayName, nameAll} from '../app/helper/names'
+import {displayName, isIndexable, nameAll} from '../app/helper/names'
 import {applyEdits, applySwaps, boardLabel, boardsOf, countBeads, floodRegion, gridFromMapNumbers, lineCells, matchToBeads, wordChart} from '../app/helper/beads/pattern'
 
 describe('brands', () => {
@@ -295,5 +295,27 @@ describe('pattern names', () => {
         const arts = [art(1, ''), art(2, 'Charmander'), art(3, 'Charmander')]
         nameAll(arts)
         expect(arts.map(a => a.name)).toEqual(['', 'Charmander', 'Charmander'])
+    })
+})
+
+describe('which pattern pages are worth indexing', () => {
+    test('a named pattern with two colours or more is indexed', () => {
+        expect(isIndexable({name: 'Charmander', colors: 2})).toBe(true)
+        expect(isIndexable({name: 'DC Logo', colors: 2})).toBe(true)
+        expect(isIndexable({name: 'Angry cat', colors: 12})).toBe(true)
+    })
+
+    test('a one-colour silhouette is not', () => {
+        // 297 of 956 arts are single-colour 1-bit sprites: "place 78 beads of
+        // one colour", near-identical to the next one in the set.
+        expect(isIndexable({name: 'Food 2 — 1-bit pixel art', colors: 1})).toBe(false)
+        expect(isIndexable({name: 'Food 4 — 1-bit pixel art', colors: 1})).toBe(false)
+    })
+
+    test('a pattern with no name of its own is not, whatever its colours', () => {
+        expect(isIndexable({name: 'Untitled 1256', colors: 1})).toBe(false)
+        expect(isIndexable({name: 'Untitled 3017', colors: 9})).toBe(false)
+        // A real title that merely starts with the word keeps its page.
+        expect(isIndexable({name: 'Untitled sunset', colors: 9})).toBe(true)
     })
 })

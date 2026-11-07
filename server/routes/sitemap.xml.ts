@@ -25,6 +25,7 @@ export default defineCachedEventHandler(async (event) => {
     const urls = paths.map(p => `<url><loc>${site}${p}</loc></url>`)
     // Pattern pages carry their picture, for image search.
     for (const a of items) {
+        if (!a.indexable) continue
         const img = `${api}/coloring/files/art-social/${a.id_string}.png?v=${Date.parse(a.updated)}`
         urls.push(`<url><loc>${site}/patterns/${a.id_string}</loc><lastmod>${a.updated.slice(0, 10)}</lastmod>`
             + `<image:image><image:loc>${esc(img)}</image:loc><image:title>${esc(`${a.name} bead pattern`)}</image:title></image:image></url>`)

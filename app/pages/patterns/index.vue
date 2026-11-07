@@ -10,7 +10,10 @@ const [{data: facets}, {data}] = await Promise.all([useFacets(), usePatterns('al
 if (page.value > (data.value?.num_pages ?? 1)) throw createError({statusCode: 404, statusMessage: 'Page not found', fatal: true})
 const ls = listingSeo(data.value?.results)
 useSeo({
-    title: `Free bead patterns for Perler and Hama${pageSuffix(page.value)}`,
+    // Every rival for this query leads with a count and the word printable --
+    // "Over 1,750 Free Designs", "158 free patterns with bead counts". This
+    // page sat at Bing position 6-7 and took 2 clicks in 160 impressions.
+    title: `${data.value?.count ?? ''} free printable Perler and Hama bead patterns${pageSuffix(page.value)}`,
     description: `${pagePrefix(page.value)}${data.value?.count ?? ''} free bead patterns by theme, size and difficulty. Open any in Perler, Hama, Artkal or MARD colours with counts and printable pages.`,
     path: `/patterns${pageQuery(page.value)}`,
     image: ls.image,

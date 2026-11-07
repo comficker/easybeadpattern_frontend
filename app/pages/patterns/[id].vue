@@ -39,6 +39,8 @@ const site = useRuntimeConfig().public.siteUrl as string
 // Size in the title keeps same-named patterns apart and matches "16x16" searches.
 const seoTitle = `${name} bead pattern, ${a.width}×${a.height}`
 useSeo({
+    // Thin ones (one colour, or no name) stay reachable but out of the index.
+    noindex: !e.indexable,
     title: seoTitle,
     description: `Free ${name} bead pattern: ${a.width} × ${a.height}, ${e.beads} beads in ${e.colors} colour${e.colors === 1 ? '' : 's'}, ${level.name.toLowerCase()}. Open it in Perler, Hama or Artkal and print it.`,
     path: `/patterns/${a.id_string}`,

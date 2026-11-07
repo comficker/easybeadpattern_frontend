@@ -45,3 +45,13 @@ export function nameAll<T extends NamedArt>(arts: T[]): T[] {
         return {...a, name}
     })
 }
+
+// Whether a pattern page is worth putting in the index. A page whose whole
+// content is "place 78 beads of one colour" has nothing to rank with, and the
+// library holds 297 of them -- Food 2, Food 3, Food 4 -- from 1-bit sprite
+// sets, near-identical to each other. A page with no name has nothing anyone
+// could search for. Both stay reachable and usable in the tool; they are just
+// noindex and out of the sitemap, the same bargain a thin listing page makes
+// (MIN_INDEX in server/utils/catalog.ts).
+export const isIndexable = (art: { name: string; colors: number }) =>
+    art.colors >= 2 && !/^Untitled \d+$/.test(art.name)

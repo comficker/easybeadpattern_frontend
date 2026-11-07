@@ -13,6 +13,7 @@ export interface ArtRow {
     beads: number
     level: Level
     tags: string[]
+    indexable: boolean
 }
 
 export interface ArtDetail {

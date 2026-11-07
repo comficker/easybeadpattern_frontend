@@ -299,7 +299,9 @@ export const CRAFTS: Record<CraftId, Craft> = {
             {q: 'How many strings do I need?', a: 'One base string per knot of width. A two-colour pattern also needs one knotting string, so a 14-knot pattern uses 15 strings. More colours need more strings.'},
             {q: 'Why DMC?', a: 'DMC stranded cotton is sold nearly everywhere and every colour has a number, so the chart tells you exactly what to buy.'},
         ],
-        metaTitle: 'Friendship bracelet pattern maker (alpha)',
+        // "alpha pattern maker" is what people type (Bing, Oct 2026: 8 queries,
+        // 19 impressions at position 7.9); "friendship bracelet" is what they get.
+        metaTitle: 'Alpha pattern maker for friendship bracelets',
         metaDescription: 'Turn a picture or a word into an alpha friendship bracelet pattern matched to DMC floss, with knot counts, string count and a row-by-row chart.',
     },
     cross: {

@@ -4,7 +4,7 @@
 // derive them here than to add endpoints. Revisit once the library reaches
 // several thousand arts: the full payload is ~9 KB per art.
 
-import {nameAll} from '../../app/helper/names'
+import {isIndexable, nameAll} from '../../app/helper/names'
 
 export type Level = 'easy' | 'medium' | 'hard'
 
@@ -19,6 +19,8 @@ export interface CatalogItem {
     beads: number
     level: Level
     tags: string[]
+    // Thin pages stay reachable but out of the index and the sitemap.
+    indexable: boolean
 }
 
 export interface CatalogTag {
@@ -65,7 +67,8 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     const tagPage: any = await $fetch(`${api}/coloring/tags/?page_size=1000`)
     for (const t of tagPage.results || []) tagNames.set(t.id, {id_string: t.id_string, name: t.name})
 
-    const items: CatalogItem[] = []
+    // `indexable` is settled below, once every name is known.
+    const items: Omit<CatalogItem, 'indexable'>[] = []
     // Only what the catalog lists, filtered on the server: public, still
     // (no animation) and under MAX_WIDTH beads a side. Asking for every
     // template and dropping most here made each page of 100 so heavy -- an
@@ -98,7 +101,7 @@ export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
 
     // Names are settled here, once, so every page and listing says the same
     // thing and nothing downstream has to know about the library's duplicates.
-    const named = nameAll(items)
+    const named = nameAll(items).map(it => ({...it, indexable: isIndexable(it)}))
 
     const tagCount = new Map<string, number>()
     const pairs = new Map<string, Map<string, number>>()
