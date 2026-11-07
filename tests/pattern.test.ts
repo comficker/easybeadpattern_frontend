@@ -3,6 +3,7 @@ import {FONT_HEIGHT, GLYPHS, normalise, textToSource} from '../app/helper/beads/
 import {decodeDone, encodeDone, patternKey} from '../app/helper/beads/progress'
 import {gridToArt} from '../app/helper/beads/share'
 import {BRAND_IDS, getBrand} from '../app/helper/beads/brands'
+import {brandFaq, brandSections, paletteFacts} from '../app/helper/beads/brandCopy'
 import {displayName, isIndexable, nameAll} from '../app/helper/names'
 import {applyEdits, applySwaps, boardLabel, boardsOf, countBeads, floodRegion, gridFromMapNumbers, lineCells, matchToBeads, wordChart} from '../app/helper/beads/pattern'
 
@@ -317,5 +318,66 @@ describe('which pattern pages are worth indexing', () => {
         expect(isIndexable({name: 'Untitled 3017', colors: 9})).toBe(false)
         // A real title that merely starts with the word keeps its page.
         expect(isIndexable({name: 'Untitled sunset', colors: 9})).toBe(true)
+    })
+})
+
+// A brand landing page has to say something a different brand's page does
+// not, or the five of them are one page with the name swapped out.
+describe('what a brand page says about its brand', () => {
+    test('every brand counts its own palette', () => {
+        for (const id of BRAND_IDS) {
+            const f = paletteFacts(getBrand(id))
+            expect(f.total).toBe(getBrand(id).beads.length)
+            expect(f.regular + f.special).toBe(f.total)
+            expect(f.codes.length).toBe(3)
+            expect(f.families.length).toBeGreaterThan(3)
+            // Hue counts account for every regular bead, once.
+            expect(f.families.reduce((n, x) => n + x.count, 0)).toBe(f.regular)
+        }
+    })
+
+    test('the counts differ enough to tell the brands apart', () => {
+        const counts = BRAND_IDS.map(id => paletteFacts(getBrand(id)).regular)
+        expect(new Set(counts).size).toBe(BRAND_IDS.length)
+        // Nabbi is the short palette, MARD the long one: the pages should not
+        // be able to give the same advice.
+        expect(Math.min(...counts)).toBeLessThan(40)
+        expect(Math.max(...counts)).toBeGreaterThan(150)
+    })
+
+    test('no two brands get the same prose', () => {
+        const texts = BRAND_IDS.map(id => {
+            const b = getBrand(id)
+            return brandSections(b).flatMap(s => s.paragraphs).join(' ') + brandFaq(b).map(f => f.q + f.a).join(' ')
+        })
+        expect(new Set(texts).size).toBe(BRAND_IDS.length)
+        for (const t of texts) expect(t.length).toBeGreaterThan(600)
+    })
+
+    test('the brand name and its real codes appear in the copy', () => {
+        for (const id of BRAND_IDS) {
+            const b = getBrand(id)
+            const text = brandSections(b).flatMap(s => s.paragraphs).join(' ')
+            expect(text).toContain(b.name)
+            expect(text).toContain(b.beads[0]!.code)
+        }
+    })
+
+    test('the hue clause never counts the same bead twice', () => {
+        // Neutrals have their own clause, so a palette whose greys are among
+        // its three largest families must not list them in both.
+        for (const id of BRAND_IDS) {
+            const b = getBrand(id)
+            const hues = brandSections(b)[0]!.paragraphs[1]!
+            expect(hues.match(/neutral/g)?.length ?? 0).toBeLessThan(2)
+        }
+    })
+
+    test('a brand with no special finishes does not claim any', () => {
+        const mard = getBrand('mard')
+        expect(paletteFacts(mard).special).toBe(0)
+        const text = brandSections(mard).flatMap(s => s.paragraphs).join(' ')
+        expect(text).toContain('all of them plain')
+        expect(text).not.toContain('left out of matching')
     })
 })

@@ -106,6 +106,5 @@ watch(art, a => { if (a) { width.value = a.width; height.value = a.height } })
         :title="art ? artName : 'My bead design'"
       />
     </div>
-    <MakerSections />
   </div>
 </template>

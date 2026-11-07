@@ -374,6 +374,12 @@ details.more > * + * { margin-top: var(--sp-3); }
 .faq details[open] summary::after { transform: rotate(180deg); }
 .faq details p { margin-top: var(--sp-2); color: var(--muted); font-size: var(--text-md); }
 
+/* Brand palette strip */
+.palette-strip { margin-bottom: var(--sp-5); }
+.palette-dots { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-2); padding: 0; margin: 0 0 var(--sp-3); }
+.palette-dots .bead-dot { display: block; width: 24px; height: 24px; }
+.palette-dots .bead-dot::after { inset: 8px; }
+
 /* Colour chart */
 .chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--sp-3); }
 .chart-item { display: grid; grid-template-columns: 40px 1fr; gap: var(--sp-3); align-items: center; font-size: var(--text-md); }

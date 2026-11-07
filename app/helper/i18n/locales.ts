@@ -21,6 +21,10 @@ export interface LocaleUi {
     // names come from the shared library and stay English.
     card: (w: number, h: number, colors: number) => string
     cardAlt: (name: string, w: number, h: number) => string
+    // "5 colours", on its own. The same words as the second half of `card`:
+    // the palette strip on a brand page needs the count without the size,
+    // and this is the one word a counted fact cannot do without.
+    colours: (n: number) => string
     // Section headings on a maker page.
     steps: string
     more: string
@@ -72,6 +76,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Zurück', next: 'Weiter', of: (p, n) => `Seite ${p} von ${n}`},
             empty: 'Hier gibt es noch keine Vorlagen.',
             card: (w, h, c) => `${w} × ${h} Perlen, ${c} Farbe${c > 1 ? 'n' : ''}`,
+            colours: c => `${c} Farbe${c > 1 ? 'n' : ''}`,
             cardAlt: (n, w, h) => `Bügelperlen-Vorlage ${n}, ${w} mal ${h} Perlen`,
             steps: 'Vom Foto zur Stiftplatte',
             more: 'Weitere Seiten auf Deutsch',
@@ -96,6 +101,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: '前へ', next: '次へ', of: (p, n) => `${n} ページ中 ${p} ページ目`},
             empty: 'まだ図案がありません。',
             card: (w, h, c) => `${w} × ${h} ビーズ、${c} 色`,
+            colours: c => `${c} 色`,
             cardAlt: (n, w, h) => `${n} のアイロンビーズ図案、${w} × ${h} ビーズ`,
             steps: '写真から図案をつくる',
             more: '日本語のほかのページ',
@@ -120,6 +126,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Anterior', next: 'Próxima', of: (p, n) => `Página ${p} de ${n}`},
             empty: 'Ainda não há moldes aqui.',
             card: (w, h, c) => `${w} × ${h} contas, ${c} cor${c > 1 ? 'es' : ''}`,
+            colours: c => `${c} cor${c > 1 ? 'es' : ''}`,
             cardAlt: (n, w, h) => `Molde de hama beads ${n}, ${w} por ${h} contas`,
             steps: 'Da foto à placa',
             more: 'Outras páginas em português',
@@ -144,6 +151,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Précédent', next: 'Suivant', of: (p, n) => `Page ${p} sur ${n}`},
             empty: 'Pas encore de modèles ici.',
             card: (w, h, c) => `${w} × ${h} perles, ${c} couleur${c > 1 ? 's' : ''}`,
+            colours: c => `${c} couleur${c > 1 ? 's' : ''}`,
             cardAlt: (n, w, h) => `Modèle de perles à repasser ${n}, ${w} sur ${h} perles`,
             steps: 'De la photo à la plaque',
             more: 'Autres pages en français',
@@ -168,6 +176,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Anterior', next: 'Siguiente', of: (p, n) => `Página ${p} de ${n}`},
             empty: 'Todavía no hay plantillas aquí.',
             card: (w, h, c) => `${w} × ${h} cuentas, ${c} color${c > 1 ? 'es' : ''}`,
+            colours: c => `${c} color${c > 1 ? 'es' : ''}`,
             cardAlt: (n, w, h) => `Plantilla de hama beads ${n}, ${w} por ${h} cuentas`,
             steps: 'De la foto a la placa',
             more: 'Otras páginas en español',
@@ -192,6 +201,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Vorige', next: 'Volgende', of: (p, n) => `Pagina ${p} van ${n}`},
             empty: 'Hier staan nog geen patronen.',
             card: (w, h, c) => `${w} × ${h} kralen, ${c} kleur${c > 1 ? 'en' : ''}`,
+            colours: c => `${c} kleur${c > 1 ? 'en' : ''}`,
             cardAlt: (n, w, h) => `Strijkkralen patroon ${n}, ${w} bij ${h} kralen`,
             steps: 'Van foto naar grondplaat',
             more: 'Andere pagina’s in het Nederlands',
@@ -216,6 +226,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Wstecz', next: 'Dalej', of: (p, n) => `Strona ${p} z ${n}`},
             empty: 'Nie ma tu jeszcze wzorów.',
             card: (w, h, c) => `${w} × ${h} koralików, ${c} ${c === 1 ? 'kolor' : c < 5 ? 'kolory' : 'kolorów'}`,
+            colours: c => `${c} ${c === 1 ? 'kolor' : c < 5 ? 'kolory' : 'kolorów'}`,
             cardAlt: (n, w, h) => `Wzór z koralików do prasowania ${n}, ${w} na ${h} koralików`,
             steps: 'Od zdjęcia do podkładki',
             more: 'Inne strony po polsku',
@@ -240,6 +251,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Föregående', next: 'Nästa', of: (p, n) => `Sida ${p} av ${n}`},
             empty: 'Inga mallar här än.',
             card: (w, h, c) => `${w} × ${h} pärlor, ${c} färg${c > 1 ? 'er' : ''}`,
+            colours: c => `${c} färg${c > 1 ? 'er' : ''}`,
             cardAlt: (n, w, h) => `Pärlplattemall ${n}, ${w} gånger ${h} pärlor`,
             steps: 'Från foto till pärlplatta',
             more: 'Fler sidor på svenska',
@@ -264,6 +276,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Forrige', next: 'Næste', of: (p, n) => `Side ${p} af ${n}`},
             empty: 'Der er ingen mønstre her endnu.',
             card: (w, h, c) => `${w} × ${h} perler, ${c} farve${c > 1 ? 'r' : ''}`,
+            colours: c => `${c} farve${c > 1 ? 'r' : ''}`,
             cardAlt: (n, w, h) => `Perlepladesmønster ${n}, ${w} gange ${h} perler`,
             steps: 'Fra foto til perleplade',
             more: 'Flere sider på dansk',
@@ -288,6 +301,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Forrige', next: 'Neste', of: (p, n) => `Side ${p} av ${n}`},
             empty: 'Ingen mønstre her ennå.',
             card: (w, h, c) => `${w} × ${h} perler, ${c} farge${c > 1 ? 'r' : ''}`,
+            colours: c => `${c} farge${c > 1 ? 'r' : ''}`,
             cardAlt: (n, w, h) => `Perlemønster ${n}, ${w} ganger ${h} perler`,
             steps: 'Fra foto til perlebrett',
             more: 'Flere sider på norsk',
@@ -312,6 +326,7 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             pager: {prev: 'Precedente', next: 'Successiva', of: (p, n) => `Pagina ${p} di ${n}`},
             empty: 'Non ci sono ancora schemi qui.',
             card: (w, h, c) => `${w} × ${h} perline, ${c} color${c > 1 ? 'i' : 'e'}`,
+            colours: c => `${c} color${c > 1 ? 'i' : 'e'}`,
             cardAlt: (n, w, h) => `Schema hama beads ${n}, ${w} per ${h} perline`,
             steps: 'Dalla foto alla base',
             more: 'Altre pagine in italiano',

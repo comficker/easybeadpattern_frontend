@@ -2,14 +2,16 @@
 import {LOCALES, englishParts, type Locale} from '~/helper/i18n/locales'
 import {PAGES, localePath, type LocalePage} from '~/helper/i18n/pages'
 
-const props = defineProps<{ locale: Locale; page: LocalePage }>()
+// `steps` is off on a brand page: the steps are the same in every page of a
+// language, so repeating them there is what made the two maker pages copies.
+const props = withDefaults(defineProps<{ locale: Locale; page: LocalePage; steps?: boolean }>(), {steps: true})
 const ui = computed(() => LOCALES[props.locale].ui)
 const english = computed(() => englishParts(ui.value))
 const others = computed(() => PAGES[props.locale].filter(p => p.slug !== props.page.slug))
 </script>
 
 <template>
-  <section v-if="page.steps?.length" class="section">
+  <section v-if="steps && page.steps?.length" class="section">
     <div class="wrap">
       <h2>{{ ui.steps }}</h2>
       <ol class="steps">

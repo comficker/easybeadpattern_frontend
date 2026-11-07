@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {brandBySlug} from '~/helper/beads/brands'
+import {brandFaq} from '~/helper/beads/brandCopy'
 import {CRAFTS, craftBySlug} from '~/helper/beads/crafts'
 import {alternatesFor, translationsOf} from '~/helper/i18n/pages'
 
@@ -22,7 +23,7 @@ if (brand) {
         alternates: translations.length ? alternatesFor(`/${slug}`) : undefined,
         jsonLd: [
             ldTool(`${brand.name} bead pattern maker`, description, `/${brand.slug}`),
-            ldFaq(CRAFTS.fuse.faq),
+            ldFaq(brandFaq(brand)),
             ldBreadcrumbs([{name: 'Bead pattern maker', path: '/'}, {name: `${brand.name} bead pattern maker`}]),
         ],
     })
@@ -54,7 +55,7 @@ if (brand) {
     <div class="wrap">
       <PatternWorkbench :initial-brand="brand.id" storage-key="bap:maker" :title="`My ${brand.name} pattern`" />
     </div>
-    <MakerSections />
+    <BrandSections :brand="brand" />
   </div>
   <div v-else-if="craft">
     <section class="hero">

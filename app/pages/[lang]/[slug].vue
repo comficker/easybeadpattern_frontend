@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {getBrand} from '~/helper/beads/brands'
 import {LOCALES, isLocale} from '~/helper/i18n/locales'
 import {alternatesFor, localePath, pageIn} from '~/helper/i18n/pages'
 
@@ -19,6 +20,13 @@ const {data} = page.kind === 'gallery'
 if (page.kind === 'gallery' && pageNum.value > (data.value?.num_pages ?? 1)) {
     throw createError({statusCode: 404, statusMessage: 'Page not found', fatal: true})
 }
+
+// Both maker pages of a language shared the same translated steps and FAQ,
+// which left them near-copies of each other with only the heading and intro
+// telling them apart. A brand page shows its own palette instead -- beads,
+// a count and real codes, which need no translating -- and leaves the shared
+// steps to the language's head page.
+const brand = computed(() => (page.brand ? getBrand(page.brand) : null))
 
 const path = localePath(locale, page) + (page.kind === 'gallery' ? pageQuery(pageNum.value) : '')
 useSeo({
@@ -53,8 +61,14 @@ const PAGES_HOME = (l: keyof typeof PAGES) => PAGES[l][0]!
     </section>
     <div class="wrap">
       <PatternWorkbench :initial-brand="page.brand" storage-key="bap:maker" :title="ui.patternTitle" />
+      <BrandPalette
+        v-if="brand"
+        :brand="brand"
+        :count-label="ui.colours(brand.beads.filter(b => !b.special).length)"
+        :chart-label="ui.footer.chart(brand.name)"
+      />
     </div>
-    <LocaleSections :locale="locale" :page="page" />
+    <LocaleSections :locale="locale" :page="page" :steps="!brand" />
   </div>
   <div v-else>
     <PatternListing
