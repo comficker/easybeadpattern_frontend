@@ -96,6 +96,7 @@ const brandHref = (id: BrandId) => localeHref(p => p.brand === id, `/${getBrand(
           <h2 class="footer-title">Patterns</h2>
           <ul>
             <li><NuxtLink to="/patterns">All bead patterns</NuxtLink></li>
+            <li><NuxtLink to="/patterns/a-z">Patterns A to Z</NuxtLink></li>
             <li><NuxtLink to="/patterns/tag">Themes A to Z</NuxtLink></li>
             <li><NuxtLink to="/patterns/level/easy">Easy bead patterns</NuxtLink></li>
             <li><NuxtLink to="/patterns/level/medium">Medium bead patterns</NuxtLink></li>

@@ -335,7 +335,11 @@ details.more > * + * { margin-top: var(--sp-3); }
 .pcard:hover .pcard-img { box-shadow: inset 0 0 0 2px var(--faint); }
 .pcard-title { font-size: var(--text-md); font-weight: 500; line-height: 1.3; letter-spacing: 0; }
 .pcard p { font-size: var(--text-xs); color: var(--muted); }
-.pager { display: flex; gap: var(--sp-2); justify-content: center; align-items: center; margin-top: var(--sp-6); font-size: var(--text-md); }
+.pager { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: center; align-items: center; margin-top: var(--sp-6); font-size: var(--text-md); }
+.pager-n { display: inline-flex; align-items: center; justify-content: center; min-width: var(--ctl-sm); height: var(--ctl-sm); padding: 0 var(--sp-2); border-radius: var(--r-pill); text-decoration: none; font-variant-numeric: tabular-nums; }
+.pager-n:hover { background: var(--board); }
+.pager-n[aria-current=page] { background: var(--ink); color: var(--paper); }
+.pager-gap { color: var(--muted); }
 
 /* Chips: tags and filters */
 .tags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
@@ -397,6 +401,13 @@ details.more > * + * { margin-top: var(--sp-3); }
 .az ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-1); font-size: var(--text-md); }
 .az a { text-decoration: none; }
 .az a:hover { text-decoration: underline; }
+.az-list {
+    list-style: none; margin: var(--sp-5) 0 0; padding: 0; font-size: var(--text-md);
+    columns: 3 220px; column-gap: var(--sp-6);
+}
+.az-list li { break-inside: avoid; padding: var(--sp-1) 0; }
+.az-list a { text-decoration: none; }
+.az-list a:hover { text-decoration: underline; }
 
 /* Beadwork hub */
 .craft-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); border-top: 1px solid var(--line); }

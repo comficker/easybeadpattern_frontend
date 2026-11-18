@@ -31,5 +31,13 @@ useSeo({
     :page="page"
   >
     <template #filters><PatternFilters :facets="facets" /></template>
+    <div class="related">
+      <h2>Browse every pattern</h2>
+      <p class="muted">
+        The whole library by name:
+        <NuxtLink to="/patterns/a-z">all bead patterns A to Z</NuxtLink>,
+        or pick a <NuxtLink to="/patterns/tag">theme</NuxtLink>.
+      </p>
+    </div>
   </PatternListing>
 </template>

@@ -5,6 +5,9 @@ import {gridToArt} from '../app/helper/beads/share'
 import {BRAND_IDS, getBrand} from '../app/helper/beads/brands'
 import {brandFaq, brandSections, paletteFacts} from '../app/helper/beads/brandCopy'
 import {displayName, isIndexable, nameAll} from '../app/helper/names'
+import {pageWindow} from '../app/helper/pager'
+import {azLetter} from '../app/helper/az'
+import {type RankedArt, bestPatterns} from '../app/helper/rank'
 import {applyEdits, applySwaps, boardLabel, boardsOf, countBeads, floodRegion, gridFromMapNumbers, lineCells, matchToBeads, wordChart} from '../app/helper/beads/pattern'
 
 describe('brands', () => {
@@ -379,5 +382,50 @@ describe('what a brand page says about its brand', () => {
         const text = brandSections(mard).flatMap(s => s.paragraphs).join(' ')
         expect(text).toContain('all of them plain')
         expect(text).not.toContain('left out of matching')
+    })
+})
+
+describe('pageWindow', () => {
+    test('shows every page when there are few', () => {
+        expect(pageWindow(1, 4)).toEqual([1, 2, 3, 4])
+    })
+    test('keeps the first and last page in reach from the middle', () => {
+        expect(pageWindow(40, 87)).toEqual([1, 0, 38, 39, 40, 41, 42, 0, 87])
+    })
+    test('marks one gap only where pages are actually skipped', () => {
+        expect(pageWindow(3, 87)).toEqual([1, 2, 3, 4, 5, 0, 87])
+        expect(pageWindow(86, 87)).toEqual([1, 0, 84, 85, 86, 87])
+    })
+    test('handles a single page', () => {
+        expect(pageWindow(1, 1)).toEqual([1])
+    })
+})
+
+describe('bestPatterns', () => {
+    const art = (name: string, o: Partial<RankedArt> = {}): RankedArt =>
+        ({name, colors: 4, beads: 100, width: 16, height: 16, tags: ['animals'], indexable: true, ...o})
+
+    test('leaves out pages that are noindex anyway', () => {
+        const out = bestPatterns([art('a'), art('b', {indexable: false})], 10)
+        expect(out.map(a => a.name)).toEqual(['a'])
+    })
+    test('prefers patterns with themes, then colours', () => {
+        const out = bestPatterns([art('plain', {tags: []}), art('tagged'), art('colourful', {colors: 12})], 2)
+        expect(out.map(a => a.name)).toEqual(['colourful', 'tagged'])
+    })
+    test('cuts to the limit and stays stable between builds', () => {
+        const items = ['c', 'a', 'b'].map(n => art(n))
+        expect(bestPatterns(items, 2).map(a => a.name)).toEqual(['a', 'b'])
+        expect(bestPatterns([...items].reverse(), 2).map(a => a.name)).toEqual(['a', 'b'])
+    })
+})
+
+describe('azLetter', () => {
+    test('files names under their first letter, numbers under 0-9', () => {
+        expect(azLetter('Charmander')).toBe('C')
+        expect(azLetter('  pikachu')).toBe('P')
+        expect(azLetter('8-bit heart')).toBe('0-9')
+        expect(azLetter('…ghost')).toBe('0-9')
+        expect(azLetter('')).toBe('0-9')
     })
 })
