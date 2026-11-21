@@ -403,20 +403,27 @@ describe('pageWindow', () => {
 
 describe('bestPatterns', () => {
     const art = (name: string, o: Partial<RankedArt> = {}): RankedArt =>
-        ({name, colors: 4, beads: 100, width: 16, height: 16, tags: ['animals'], indexable: true, ...o})
+        ({name, colors: 4, beads: 100, width: 16, height: 16, tags: ['animals'], indexable: true, updated: '2026-01-01T00:00:00Z', ...o})
 
     test('leaves out pages that are noindex anyway', () => {
-        const out = bestPatterns([art('a'), art('b', {indexable: false})], 10)
+        const out = bestPatterns([art('a'), art('b', {indexable: false})], 10, 0)
         expect(out.map(a => a.name)).toEqual(['a'])
     })
     test('prefers patterns with themes, then colours', () => {
-        const out = bestPatterns([art('plain', {tags: []}), art('tagged'), art('colourful', {colors: 12})], 2)
+        const out = bestPatterns([art('plain', {tags: []}), art('tagged'), art('colourful', {colors: 12})], 2, 0)
         expect(out.map(a => a.name)).toEqual(['colourful', 'tagged'])
+    })
+    test('keeps a seat for the newest patterns, whatever they score', () => {
+        const old = art('old', {tags: ['a', 'b', 'c'], colors: 12, width: 32, height: 32})
+        const neu = art('new', {tags: [], colors: 2, updated: '2026-11-18T00:00:00Z'})
+        expect(bestPatterns([old, neu], 1, 0).map(a => a.name)).toEqual(['old'])
+        expect(bestPatterns([old, neu], 1, 1).map(a => a.name)).toEqual(['new'])
+        expect(bestPatterns([old, neu], 2, 1).map(a => a.name)).toEqual(['new', 'old'])
     })
     test('cuts to the limit and stays stable between builds', () => {
         const items = ['c', 'a', 'b'].map(n => art(n))
-        expect(bestPatterns(items, 2).map(a => a.name)).toEqual(['a', 'b'])
-        expect(bestPatterns([...items].reverse(), 2).map(a => a.name)).toEqual(['a', 'b'])
+        expect(bestPatterns(items, 2, 0).map(a => a.name)).toEqual(['a', 'b'])
+        expect(bestPatterns([...items].reverse(), 2, 0).map(a => a.name)).toEqual(['a', 'b'])
     })
 })
 

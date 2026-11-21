@@ -63,9 +63,18 @@ export function levelOf(width: number, height: number, colors: number): Level {
 export const getCatalog = defineCachedFunction(async (): Promise<Catalog> => {
     const api = useRuntimeConfig().public.api as string
 
+    // Every page of tags, not the first 1,000. The library passed that mark and
+    // the endpoint returns the newest ids first, so one page silently dropped
+    // the oldest -- and the oldest are the broad themes: Flower (302), Garden
+    // (422), Animal. A pattern tagged with one of them lost that tag here, so
+    // there was no theme page for it and no way to browse to it.
     const tagNames = new Map<number, { id_string: string; name: string }>()
-    const tagPage: any = await $fetch(`${api}/coloring/tags/?page_size=1000`)
-    for (const t of tagPage.results || []) tagNames.set(t.id, {id_string: t.id_string, name: t.name})
+    let tagsNext: string | null = `${api}/coloring/tags/?page_size=500`
+    for (let guard = 0; tagsNext && guard < 20; guard++) {
+        const tagPage: any = await $fetch(tagsNext)
+        for (const t of tagPage.results || []) tagNames.set(t.id, {id_string: t.id_string, name: t.name})
+        tagsNext = tagPage.links?.next || null
+    }
 
     // `indexable` is settled below, once every name is known.
     const items: Omit<CatalogItem, 'indexable'>[] = []
