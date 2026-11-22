@@ -7,6 +7,7 @@ import {brandFaq, brandSections, paletteFacts} from '../app/helper/beads/brandCo
 import {displayName, isIndexable, nameAll} from '../app/helper/names'
 import {pageWindow} from '../app/helper/pager'
 import {azLetter} from '../app/helper/az'
+import {licenseUrl} from '../app/helper/license'
 import {type RankedArt, bestPatterns} from '../app/helper/rank'
 import {applyEdits, applySwaps, boardLabel, boardsOf, countBeads, floodRegion, gridFromMapNumbers, lineCells, matchToBeads, wordChart} from '../app/helper/beads/pattern'
 
@@ -434,5 +435,19 @@ describe('azLetter', () => {
         expect(azLetter('8-bit heart')).toBe('0-9')
         expect(azLetter('…ghost')).toBe('0-9')
         expect(azLetter('')).toBe('0-9')
+    })
+})
+
+describe('licenseUrl', () => {
+    test('maps the licences an artist can pick on SimplePixelArt', () => {
+        expect(licenseUrl('cc-by-4.0')).toBe('https://creativecommons.org/licenses/by/4.0/')
+        expect(licenseUrl('cc0')).toBe('https://creativecommons.org/publicdomain/zero/1.0/')
+        expect(licenseUrl('MIT')).toBe('https://opensource.org/license/mit')
+    })
+    test('gives no URL for all rights reserved, so the schema omits the field', () => {
+        expect(licenseUrl('')).toBeUndefined()
+        expect(licenseUrl(null)).toBeUndefined()
+        expect(licenseUrl(undefined)).toBeUndefined()
+        expect(licenseUrl('something-else')).toBeUndefined()
     })
 })

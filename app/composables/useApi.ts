@@ -28,6 +28,9 @@ export interface ArtDetail {
     map_numbers: Record<string, number>
     taxonomies: { id_string: string; name: string }[]
     user?: { username: string } | null
+    // Only the licence key out of the backend's `meta`: the picture's schema
+    // needs it, the rest of meta does not belong in the HTML.
+    license?: string | null
 }
 
 export interface PatternStats {

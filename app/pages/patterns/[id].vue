@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {isCraftId} from '~/helper/beads/crafts'
 import {gridFromMapNumbers} from '~/helper/beads/pattern'
+import {licenseUrl} from '~/helper/license'
 import type {ArtDetail, ArtRow} from '~/composables/useApi'
 
 const route = useRoute()
@@ -17,6 +18,7 @@ const [{data: entry}, {data: art, error}] = await Promise.all([
             updated: d.updated, colors: d.colors, map_numbers: d.map_numbers,
             taxonomies: (d.taxonomies || []).map((t: any) => ({id_string: t.id_string, name: t.name})),
             user: d.user ? {username: d.user.username} : null,
+            license: d.meta?.license ?? null,
         }),
     }),
 ])
@@ -38,6 +40,33 @@ const site = useRuntimeConfig().public.siteUrl as string
 
 // Size in the title keeps same-named patterns apart and matches "16x16" searches.
 const seoTitle = `${name} bead pattern, ${a.width}×${a.height}`
+
+// The picture as its own ImageObject rather than a bare URL: Google Images
+// shows a "Licensable" badge for an image that names its licence, and these
+// pages live or die on image search. The art is drawn by its author on
+// SimplePixelArt, so that is who gets the credit and the copyright line; the
+// licence is whatever they picked when they published, and a piece left as
+// all rights reserved simply has no `license` field.
+function patternImage() {
+    const author = a.user?.username
+    const credit = author ? `${author} — SimplePixelArt.com` : 'SimplePixelArt.com'
+    const url = licenseUrl(a.license)
+    return {
+        '@type': 'ImageObject',
+        contentUrl: artThumb(a, 'art-social'),
+        url: artThumb(a, 'art-social'),
+        caption: `${name} bead pattern, ${a.width} by ${a.height} beads`,
+        creditText: credit,
+        copyrightNotice: `© ${credit}`,
+        creator: {
+            '@type': 'Person',
+            name: author || 'Anonymous',
+            ...(author ? {url: `https://simplepixelart.com/creator/${author}`} : {}),
+        },
+        ...(url ? {license: url} : {}),
+        acquireLicensePage: `${site}/patterns/${a.id_string}`,
+    }
+}
 useSeo({
     // Thin ones (one colour, or no name) stay reachable but out of the index.
     noindex: !e.indexable,
@@ -53,7 +82,7 @@ useSeo({
             '@type': 'CreativeWork',
             name: `${name} bead pattern`,
             description: a.desc || undefined,
-            image: artThumb(a, 'art-social'),
+            image: patternImage(),
             url: `${site}/patterns/${a.id_string}`,
             keywords: [...a.taxonomies.map(t => t.name), 'bead pattern', 'perler beads'].join(', '),
             author: a.user?.username ? {'@type': 'Person', name: a.user.username} : undefined,
