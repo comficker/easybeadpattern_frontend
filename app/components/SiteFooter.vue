@@ -61,14 +61,6 @@ const brandHref = (id: BrandId) => localeHref(p => p.brand === id, `/${getBrand(
             <li><NuxtLink to="/patterns/level/hard">{{ ui.footer.hard }}</NuxtLink></li>
           </ul>
         </div>
-        <div>
-          <h2 class="footer-title">{{ ui.footer.tools }}</h2>
-          <ul>
-            <li><a href="https://simplepixelart.com">SimplePixelArt</a></li>
-            <li><a href="https://www.squarecoloring.com/">SquareColoring</a></li>
-            <li><a href="https://freegraphpaper.net">FreeGraphPaper</a></li>
-          </ul>
-        </div>
       </div>
 
       <div v-else class="cols">
@@ -107,14 +99,6 @@ const brandHref = (id: BrandId) => localeHref(p => p.brand === id, `/${getBrand(
           <h2 class="footer-title">Guides</h2>
           <ul>
             <li v-for="g in GUIDES" :key="g.slug"><NuxtLink :to="`/guides/${g.slug}`">{{ g.title }}</NuxtLink></li>
-          </ul>
-        </div>
-        <div>
-          <h2 class="footer-title">More tools</h2>
-          <ul>
-            <li><a href="https://simplepixelart.com">SimplePixelArt</a></li>
-            <li><a href="https://www.squarecoloring.com/">SquareColoring</a></li>
-            <li><a href="https://freegraphpaper.net">FreeGraphPaper</a></li>
           </ul>
         </div>
       </div>

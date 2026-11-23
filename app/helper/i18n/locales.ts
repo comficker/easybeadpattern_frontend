@@ -44,8 +44,6 @@ export interface LocaleUi {
         maker: (brand: string) => string
         charts: string
         chart: (brand: string) => string
-        // Heading over the sibling sites, whose names need no translating.
-        tools: string
         patterns: string
         all: string
         themes: string
@@ -87,7 +85,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Vorlagen-Generatoren', maker: b => `${b} Vorlagen`,
                 charts: 'Farbtabellen', chart: b => `${b} Farbtabelle`,
-                tools: 'Weitere Tools',
                 patterns: 'Vorlagen', all: 'Alle Vorlagen', themes: 'Themen A bis Z',
                 easy: 'Einfache Vorlagen', medium: 'Mittlere Vorlagen', hard: 'Schwere Vorlagen',
                 languages: 'Sprache',
@@ -112,7 +109,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: '図案メーカー', maker: b => `${b} の図案`,
                 charts: 'カラーチャート', chart: b => `${b} のカラーチャート`,
-                tools: 'ほかのツール',
                 patterns: '図案', all: 'すべての図案', themes: 'テーマ A–Z',
                 easy: 'やさしい図案', medium: 'ふつうの図案', hard: 'むずかしい図案',
                 languages: '言語',
@@ -137,7 +133,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Geradores de molde', maker: b => `Moldes ${b}`,
                 charts: 'Tabelas de cores', chart: b => `Tabela de cores ${b}`,
-                tools: 'Mais ferramentas',
                 patterns: 'Moldes', all: 'Todos os moldes', themes: 'Temas de A a Z',
                 easy: 'Moldes fáceis', medium: 'Moldes médios', hard: 'Moldes difíceis',
                 languages: 'Idioma',
@@ -162,7 +157,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Générateurs de modèles', maker: b => `Modèles ${b}`,
                 charts: 'Nuanciers', chart: b => `Nuancier ${b}`,
-                tools: 'Autres outils',
                 patterns: 'Modèles', all: 'Tous les modèles', themes: 'Thèmes de A à Z',
                 easy: 'Modèles faciles', medium: 'Modèles moyens', hard: 'Modèles difficiles',
                 languages: 'Langue',
@@ -187,7 +181,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Generadores de plantillas', maker: b => `Plantillas ${b}`,
                 charts: 'Cartas de colores', chart: b => `Carta de colores ${b}`,
-                tools: 'Más herramientas',
                 patterns: 'Plantillas', all: 'Todas las plantillas', themes: 'Temas de la A a la Z',
                 easy: 'Plantillas fáciles', medium: 'Plantillas medias', hard: 'Plantillas difíciles',
                 languages: 'Idioma',
@@ -212,7 +205,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Patroonmakers', maker: b => `${b} patronen`,
                 charts: 'Kleurenkaarten', chart: b => `${b} kleurenkaart`,
-                tools: 'Meer tools',
                 patterns: 'Patronen', all: 'Alle patronen', themes: 'Thema’s van A tot Z',
                 easy: 'Makkelijke patronen', medium: 'Gemiddelde patronen', hard: 'Moeilijke patronen',
                 languages: 'Taal',
@@ -237,7 +229,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Generatory wzorów', maker: b => `Wzory ${b}`,
                 charts: 'Tabele kolorów', chart: b => `Tabela kolorów ${b}`,
-                tools: 'Więcej narzędzi',
                 patterns: 'Wzory', all: 'Wszystkie wzory', themes: 'Tematy od A do Z',
                 easy: 'Łatwe wzory', medium: 'Średnie wzory', hard: 'Trudne wzory',
                 languages: 'Język',
@@ -262,7 +253,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Mallgeneratorer', maker: b => `${b} mallar`,
                 charts: 'Färgkartor', chart: b => `${b} färgkarta`,
-                tools: 'Fler verktyg',
                 patterns: 'Mallar', all: 'Alla mallar', themes: 'Teman A till Ö',
                 easy: 'Lätta mallar', medium: 'Medelsvåra mallar', hard: 'Svåra mallar',
                 languages: 'Språk',
@@ -287,7 +277,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Mønstergeneratorer', maker: b => `${b} mønstre`,
                 charts: 'Farvekort', chart: b => `${b} farvekort`,
-                tools: 'Flere værktøjer',
                 patterns: 'Mønstre', all: 'Alle mønstre', themes: 'Temaer fra A til Å',
                 easy: 'Lette mønstre', medium: 'Mellemsvære mønstre', hard: 'Svære mønstre',
                 languages: 'Sprog',
@@ -312,7 +301,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Mønstergeneratorer', maker: b => `${b} mønstre`,
                 charts: 'Fargekart', chart: b => `${b} fargekart`,
-                tools: 'Flere verktøy',
                 patterns: 'Mønstre', all: 'Alle mønstre', themes: 'Temaer fra A til Å',
                 easy: 'Lette mønstre', medium: 'Middels mønstre', hard: 'Vanskelige mønstre',
                 languages: 'Språk',
@@ -337,7 +325,6 @@ export const LOCALES: Record<Locale, LocaleMeta> = {
             footer: {
                 makers: 'Generatori di schemi', maker: b => `Schemi ${b}`,
                 charts: 'Tabelle colori', chart: b => `Tabella colori ${b}`,
-                tools: 'Altri strumenti',
                 patterns: 'Schemi', all: 'Tutti gli schemi', themes: 'Temi dalla A alla Z',
                 easy: 'Schemi facili', medium: 'Schemi medi', hard: 'Schemi difficili',
                 languages: 'Lingua',
